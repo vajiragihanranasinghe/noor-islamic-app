@@ -152,7 +152,7 @@ public class HomeFragment extends Fragment {
         int highLat  = PrayerPrefs.highLat(requireContext());
 
         RetrofitClient.getApi()
-                .getTimings(lat, lon, method, school, highLat, "auto")
+                .getTimings(lat, lon, method, school, highLat)
                 .enqueue(new Callback<PrayerTimesResponse>() {
                     @Override public void onResponse(@NonNull Call<PrayerTimesResponse> call,
                                                      @NonNull Response<PrayerTimesResponse> response) {
