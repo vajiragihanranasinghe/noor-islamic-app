@@ -1,0 +1,23 @@
+NOOR — ISLAMIC COMPANION APP
+Copyright (c) 2026
+
+Sold on Envato (CodeCanyon) under the Envato Regular/Extended License.
+
+PERMITTED:
+  - Use for one end product
+  - Modify and customize
+  - Use in a commercial app
+
+NOT PERMITTED:
+  - Redistribute source code
+  - Resell on other marketplaces
+  - Claim as original work
+
+DATA SOURCES:
+  - Quran text: Tanzil.net (free with attribution)
+  - Translation: Pickthall (public domain)
+  - Prayer times: Aladhan.com API (free)
+  - 99 Names: Traditional (public domain)
+  - Duas: Quran & Sunnah (public domain)
+
+Full terms: https://codecanyon.net/licenses

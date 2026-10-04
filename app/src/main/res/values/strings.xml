@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Noor</string>
+    <string name="app_tagline">Islamic Companion</string>
+
+    <!-- Bottom nav -->
+    <string name="nav_home">Home</string>
+    <string name="nav_quran">Quran</string>
+    <string name="nav_qibla">Qibla</string>
+    <string name="nav_tasbih">Tasbih</string>
+    <string name="nav_more">More</string>
+
+    <!-- Splash -->
+    <string name="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</string>
+
+    <!-- Placeholders -->
+    <string name="coming_soon">Coming soon…</string>
+    <string name="welcome">Welcome to Noor</string>
+    <string name="welcome_sub">Your Islamic companion — Quran, Prayer Times, Qibla &amp; more</string>
+</resources>

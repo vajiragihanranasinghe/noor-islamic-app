@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="280dp"
+    android:height="280dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <!-- Outer circle -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#0F5132"
+        android:strokeWidth="3"
+        android:pathData="M100,10 A90,90 0 1,1 100,190 A90,90 0 1,1 100,10 Z" />
+
+    <!-- Inner circle -->
+    <path
+        android:fillColor="#F0F5F1"
+        android:strokeColor="#D4AF37"
+        android:strokeWidth="1.5"
+        android:pathData="M100,25 A75,75 0 1,1 100,175 A75,75 0 1,1 100,25 Z" />
+
+    <!-- Cardinal tick marks -->
+    <path android:fillColor="#0F5132" android:pathData="M99,10 L101,10 L101,25 L99,25 Z" />
+    <path android:fillColor="#0F5132" android:pathData="M99,175 L101,175 L101,190 L99,190 Z" />
+    <path android:fillColor="#0F5132" android:pathData="M10,99 L25,99 L25,101 L10,101 Z" />
+    <path android:fillColor="#0F5132" android:pathData="M175,99 L190,99 L190,101 L175,101 Z" />
+</vector>

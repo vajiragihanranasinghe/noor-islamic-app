@@ -1,0 +1,322 @@
+[
+  {
+    "category": "Morning",
+    "title": "Upon waking up",
+    "arabic": "الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ",
+    "transliteration": "Alhamdulillahi alladhi ahyana ba'da ma amatana wa ilayhin-nushur",
+    "meaning": "All praise is for Allah who gave us life after having taken it from us, and unto Him is the resurrection.",
+    "reference": "Bukhari 6312"
+  },
+  {
+    "category": "Morning",
+    "title": "Morning remembrance",
+    "arabic": "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ",
+    "transliteration": "Asbahna wa asbahal-mulku lillah, walhamdulillah, la ilaha illallahu wahdahu la sharika lah",
+    "meaning": "We have entered the morning and the dominion belongs to Allah. All praise is for Allah. There is no god but Allah alone, without any partner.",
+    "reference": "Muslim 2723"
+  },
+  {
+    "category": "Morning",
+    "title": "Sayyidul Istighfar",
+    "arabic": "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَٰهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ",
+    "transliteration": "Allahumma anta rabbi la ilaha illa anta, khalaqtani wa ana abduk",
+    "meaning": "O Allah, You are my Lord, there is no god but You. You created me and I am Your servant.",
+    "reference": "Bukhari 6306"
+  },
+  {
+    "category": "Evening",
+    "title": "Evening remembrance",
+    "arabic": "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ",
+    "transliteration": "Amsayna wa amsal-mulku lillah, walhamdulillah, la ilaha illallahu wahdahu la sharika lah",
+    "meaning": "We have entered the evening and the dominion belongs to Allah. All praise is for Allah. There is no god but Allah alone.",
+    "reference": "Muslim 2723"
+  },
+  {
+    "category": "Evening",
+    "title": "Protection in the evening",
+    "arabic": "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ",
+    "transliteration": "A'udhu bikalimatillahit-tammati min sharri ma khalaq",
+    "meaning": "I seek refuge in the perfect words of Allah from the evil of what He has created.",
+    "reference": "Muslim 2708"
+  },
+  {
+    "category": "Sleep",
+    "title": "Before sleeping",
+    "arabic": "بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا",
+    "transliteration": "Bismika Allahumma amutu wa ahya",
+    "meaning": "In Your name, O Allah, I die and I live.",
+    "reference": "Bukhari 6324"
+  },
+  {
+    "category": "Sleep",
+    "title": "Before sleeping (2)",
+    "arabic": "اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ",
+    "transliteration": "Allahumma qini adhabaka yawma tab'athu ibadak",
+    "meaning": "O Allah, protect me from Your punishment on the Day You resurrect Your servants.",
+    "reference": "Abu Dawud 5045"
+  },
+  {
+    "category": "Sleep",
+    "title": "Ayat al-Kursi (recommended)",
+    "arabic": "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ",
+    "transliteration": "Allahu la ilaha illa huwal-hayyul-qayyum",
+    "meaning": "Allah — there is no deity except Him, the Ever-Living, the Sustainer of existence. (Recite before sleep)",
+    "reference": "Bukhari 2311"
+  },
+  {
+    "category": "Eating",
+    "title": "Before eating",
+    "arabic": "بِسْمِ اللَّهِ",
+    "transliteration": "Bismillah",
+    "meaning": "In the name of Allah.",
+    "reference": "Abu Dawud 3767"
+  },
+  {
+    "category": "Eating",
+    "title": "If forgot before eating",
+    "arabic": "بِسْمِ اللَّهِ أَوَّلَهُ وَآخِرَهُ",
+    "transliteration": "Bismillahi awwalahu wa akhirahu",
+    "meaning": "In the name of Allah at its beginning and its end.",
+    "reference": "Abu Dawud 3767"
+  },
+  {
+    "category": "Eating",
+    "title": "After eating",
+    "arabic": "الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنِي هَذَا وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلَا قُوَّةٍ",
+    "transliteration": "Alhamdulillahil-ladhi at'amani hadha wa razaqanihi min ghayri hawlin minni wa la quwwah",
+    "meaning": "All praise is for Allah who fed me this and provided it for me without any strength or power on my part.",
+    "reference": "Tirmidhi 3458"
+  },
+  {
+    "category": "Travel",
+    "title": "When starting a journey",
+    "arabic": "سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ، وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُونَ",
+    "transliteration": "Subhanal-ladhi sakhkhara lana hadha wa ma kunna lahu muqrinin, wa inna ila rabbina lamunqalibun",
+    "meaning": "Glory to Him who has subjected this to us, and we could never have it by our efforts. Surely, to our Lord we are returning.",
+    "reference": "Muslim 1342"
+  },
+  {
+    "category": "Travel",
+    "title": "Entering a town",
+    "arabic": "اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَهَا وَخَيْرَ أَهْلِهَا وَخَيْرَ مَا فِيهَا",
+    "transliteration": "Allahumma inni as'aluka khayraha wa khayra ahliha wa khayra ma fiha",
+    "meaning": "O Allah, I ask You for the good of this town, the good of its people, and the good within it.",
+    "reference": "Hakim 2/505"
+  },
+  {
+    "category": "Anxiety",
+    "title": "When in distress",
+    "arabic": "لَا إِلَٰهَ إِلَّا اللَّهُ الْعَظِيمُ الْحَلِيمُ، لَا إِلَٰهَ إِلَّا اللَّهُ رَبُّ الْعَرْشِ الْعَظِيمِ",
+    "transliteration": "La ilaha illallahul-Azimul-Halim, la ilaha illallahu Rabbul-Arshil-Azim",
+    "meaning": "There is no god but Allah, the Mighty, the Forbearing. There is no god but Allah, Lord of the Magnificent Throne.",
+    "reference": "Bukhari 6345"
+  },
+  {
+    "category": "Anxiety",
+    "title": "For worry and sorrow",
+    "arabic": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ",
+    "transliteration": "Allahumma inni a'udhu bika minal-hammi wal-hazan",
+    "meaning": "O Allah, I seek refuge in You from worry and grief.",
+    "reference": "Bukhari 6369"
+  },
+  {
+    "category": "Anxiety",
+    "title": "Dua of Yunus (AS)",
+    "arabic": "لَا إِلَٰهَ إِلَّا أَنْتَ سُبْحَانَكَ إِنِّي كُنْتُ مِنَ الظَّالِمِينَ",
+    "transliteration": "La ilaha illa anta subhanaka inni kuntu minaz-zalimin",
+    "meaning": "There is no god but You, glory be to You. Indeed, I have been of the wrongdoers.",
+    "reference": "Quran 21:87"
+  },
+  {
+    "category": "Forgiveness",
+    "title": "Sayyidul Istighfar (full)",
+    "arabic": "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَٰهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ",
+    "transliteration": "Allahumma anta rabbi la ilaha illa anta, khalaqtani wa ana abduk, wa ana ala ahdika wa wa'dika mastata't",
+    "meaning": "O Allah, You are my Lord, none has the right to be worshipped except You. You created me and I am Your servant. I shall remain faithful to Your covenant and promise as best as I can.",
+    "reference": "Bukhari 6306"
+  },
+  {
+    "category": "Forgiveness",
+    "title": "Simple Istighfar",
+    "arabic": "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ",
+    "transliteration": "Astaghfirullaha wa atubu ilayh",
+    "meaning": "I seek the forgiveness of Allah and turn to Him in repentance.",
+    "reference": "Bukhari 6307"
+  },
+  {
+    "category": "Forgiveness",
+    "title": "Best dua for forgiveness",
+    "arabic": "رَبِّ اغْفِرْ لِي وَتُبْ عَلَيَّ إِنَّكَ أَنْتَ التَّوَّابُ الرَّحِيمُ",
+    "transliteration": "Rabbighfir li wa tub alayya innaka antat-Tawwabur-Rahim",
+    "meaning": "My Lord, forgive me and accept my repentance. Indeed, You are the Accepter of repentance, the Merciful.",
+    "reference": "Tirmidhi 3434"
+  },
+  {
+    "category": "Protection",
+    "title": "Morning & evening protection",
+    "arabic": "بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ",
+    "transliteration": "Bismillahil-ladhi la yadurru ma'asmihi shay'un fil-ardi wa la fis-sama'i wa huwas-Sami'ul-Alim",
+    "meaning": "In the name of Allah, with whose name nothing on earth or in the heaven can cause harm. He is the All-Hearing, the All-Knowing.",
+    "reference": "Abu Dawud 5088"
+  },
+  {
+    "category": "Protection",
+    "title": "Against evil eye",
+    "arabic": "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّةِ مِنْ كُلِّ شَيْطَانٍ وَهَامَّةٍ وَمِنْ كُلِّ عَيْنٍ لَامَّةٍ",
+    "transliteration": "A'udhu bikalimatillahit-tammati min kulli shaytanin wa hammatin wa min kulli aynin lammah",
+    "meaning": "I seek refuge in the perfect words of Allah from every devil, every beast, and every evil eye.",
+    "reference": "Bukhari 3371"
+  },
+  {
+    "category": "Protection",
+    "title": "Before entering home",
+    "arabic": "اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ الْمَوْلِجِ وَخَيْرَ الْمَخْرَجِ",
+    "transliteration": "Allahumma inni as'aluka khayral-mawliji wa khayral-makhraj",
+    "meaning": "O Allah, I ask You for the best entering and the best exiting.",
+    "reference": "Abu Dawud 5096"
+  },
+  {
+    "category": "Dhikr",
+    "title": "Best dhikr",
+    "arabic": "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ",
+    "transliteration": "SubhanAllahi wa bihamdih, SubhanAllahil-Azim",
+    "meaning": "Glory be to Allah and praise Him. Glory be to Allah, the Magnificent.",
+    "reference": "Bukhari 6682"
+  },
+  {
+    "category": "Dhikr",
+    "title": "Two words light on tongue",
+    "arabic": "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ",
+    "transliteration": "SubhanAllahi wa bihamdih, SubhanAllahil-Azim",
+    "meaning": "Two words which are light on the tongue but heavy on the scales.",
+    "reference": "Bukhari 6406"
+  },
+  {
+    "category": "Dhikr",
+    "title": "Kalima Tawheed",
+    "arabic": "لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+    "transliteration": "La ilaha illallahu wahdahu la sharika lah, lahul-mulku wa lahul-hamdu wa huwa ala kulli shay'in qadir",
+    "meaning": "There is no god but Allah alone, without any partner. His is the dominion and His is the praise, and He is capable of all things.",
+    "reference": "Bukhari 3293"
+  },
+  {
+    "category": "Dhikr",
+    "title": "Salawat on the Prophet ﷺ",
+    "arabic": "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ",
+    "transliteration": "Allahumma salli ala Muhammadin wa ala ali Muhammad",
+    "meaning": "O Allah, send blessings upon Muhammad and upon the family of Muhammad.",
+    "reference": "Bukhari 3370"
+  },
+  {
+    "category": "Health",
+    "title": "When in pain",
+    "arabic": "بِسْمِ اللَّهِ (ثَلَاثًا) أَعُوذُ بِاللَّهِ وَقُدْرَتِهِ مِنْ شَرِّ مَا أَجِدُ وَأُحَاذِرُ",
+    "transliteration": "Bismillah (3x) A'udhu billahi wa qudratihi min sharri ma ajidu wa uhadhir",
+    "meaning": "In the name of Allah (3x). I seek refuge in Allah and His power from the evil of what I feel and fear.",
+    "reference": "Muslim 2202"
+  },
+  {
+    "category": "Health",
+    "title": "For healing",
+    "arabic": "اللَّهُمَّ رَبَّ النَّاسِ، أَذْهِبِ الْبَاسَ، اشْفِ أَنْتَ الشَّافِي",
+    "transliteration": "Allahumma Rabban-nas, adh-hibil-bas, ishfi antash-Shafi",
+    "meaning": "O Allah, Lord of the people, remove the hardship. Heal, for You are the Healer.",
+    "reference": "Bukhari 5675"
+  },
+  {
+    "category": "Knowledge",
+    "title": "For increase in knowledge",
+    "arabic": "رَبِّ زِدْنِي عِلْمًا",
+    "transliteration": "Rabbi zidni ilma",
+    "meaning": "My Lord, increase me in knowledge.",
+    "reference": "Quran 20:114"
+  },
+  {
+    "category": "Knowledge",
+    "title": "For beneficial knowledge",
+    "arabic": "اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا وَرِزْقًا طَيِّبًا وَعَمَلًا مُتَقَبَّلًا",
+    "transliteration": "Allahumma inni as'aluka ilman nafi'an wa rizqan tayyiban wa amalan mutaqabbalan",
+    "meaning": "O Allah, I ask You for beneficial knowledge, good provision, and accepted deeds.",
+    "reference": "Ibn Majah 925"
+  },
+  {
+    "category": "Family",
+    "title": "For spouse and children",
+    "arabic": "رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا وَذُرِّيَّاتِنَا قُرَّةَ أَعْيُنٍ وَاجْعَلْنَا لِلْمُتَّقِينَ إِمَامًا",
+    "transliteration": "Rabbana hab lana min azwajina wa dhurriyyatina qurrata a'yunin waj'alna lil-muttaqina imama",
+    "meaning": "Our Lord, grant us from among our spouses and offspring comfort to our eyes, and make us leaders of the righteous.",
+    "reference": "Quran 25:74"
+  },
+  {
+    "category": "Family",
+    "title": "For righteous children",
+    "arabic": "رَبِّ هَبْ لِي مِنَ الصَّالِحِينَ",
+    "transliteration": "Rabbi hab li minas-salihin",
+    "meaning": "My Lord, grant me from among the righteous.",
+    "reference": "Quran 37:100"
+  },
+  {
+    "category": "Family",
+    "title": "For parents",
+    "arabic": "رَبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا",
+    "transliteration": "Rabbir-hamhuma kama rabbayani saghira",
+    "meaning": "My Lord, have mercy upon them as they brought me up when I was small.",
+    "reference": "Quran 17:24"
+  },
+  {
+    "category": "Guidance",
+    "title": "For steadfastness",
+    "arabic": "رَبَّنَا لَا تُزِغْ قُلُوبَنَا بَعْدَ إِذْ هَدَيْتَنَا وَهَبْ لَنَا مِنْ لَدُنْكَ رَحْمَةً إِنَّكَ أَنْتَ الْوَهَّابُ",
+    "transliteration": "Rabbana la tuzigh qulubana ba'da idh hadaytana wa hab lana min ladunka rahmah innaka antal-Wahhab",
+    "meaning": "Our Lord, let not our hearts deviate after You have guided us and grant us mercy from Yourself. Indeed, You are the Bestower.",
+    "reference": "Quran 3:8"
+  },
+  {
+    "category": "Guidance",
+    "title": "Best dua for good in both worlds",
+    "arabic": "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
+    "transliteration": "Rabbana atina fid-dunya hasanatan wa fil-akhirati hasanatan wa qina adhaban-nar",
+    "meaning": "Our Lord, give us good in this world and good in the Hereafter, and protect us from the punishment of the Fire.",
+    "reference": "Quran 2:201"
+  },
+  {
+    "category": "Guidance",
+    "title": "For ease",
+    "arabic": "رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي",
+    "transliteration": "Rabbish-rah li sadri wa yassir li amri",
+    "meaning": "My Lord, expand for me my chest and ease for me my task.",
+    "reference": "Quran 20:25-26"
+  },
+  {
+    "category": "Ramadan",
+    "title": "Breaking the fast",
+    "arabic": "اللَّهُمَّ إِنِّي لَكَ صُمْتُ وَبِكَ آمَنْتُ وَعَلَى رِزْقِكَ أَفْطَرْتُ",
+    "transliteration": "Allahumma inni laka sumtu wa bika amantu wa ala rizqika aftartu",
+    "meaning": "O Allah, I fasted for You, believed in You, and broke my fast with Your provision.",
+    "reference": "Abu Dawud 2357"
+  },
+  {
+    "category": "Ramadan",
+    "title": "Laylatul Qadr",
+    "arabic": "اللَّهُمَّ إِنَّكَ عَفُوٌّ تُحِبُّ الْعَفْوَ فَاعْفُ عَنِّي",
+    "transliteration": "Allahumma innaka Afuwwun tuhibbul-afwa fa'fu anni",
+    "meaning": "O Allah, You are Most Forgiving and love forgiveness, so forgive me.",
+    "reference": "Tirmidhi 3513"
+  },
+  {
+    "category": "General",
+    "title": "When thanking someone",
+    "arabic": "جَزَاكَ اللَّهُ خَيْرًا",
+    "transliteration": "Jazakallahu khayran",
+    "meaning": "May Allah reward you with good.",
+    "reference": "Tirmidhi 2035"
+  },
+  {
+    "category": "General",
+    "title": "Seeking Allah's pleasure",
+    "arabic": "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْجَنَّةَ وَأَعُوذُ بِكَ مِنَ النَّارِ",
+    "transliteration": "Allahumma inni as'alukal-jannata wa a'udhu bika minan-nar",
+    "meaning": "O Allah, I ask You for Paradise and seek refuge in You from the Fire.",
+    "reference": "Abu Dawud 792"
+  }
+]

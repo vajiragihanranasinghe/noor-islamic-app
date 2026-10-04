@@ -1,0 +1,18 @@
+<resources>
+    <!-- Islamic green + gold palette — DARK MODE -->
+    <color name="primary">#1A7A4D</color>
+    <color name="primary_dark">#0F5132</color>
+    <color name="primary_light">#2A9F6A</color>
+    <color name="accent">#D4AF37</color>
+    <color name="accent_dark">#B8941F</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <!-- Dark mode text + backgrounds -->
+    <color name="text_primary">#ECEFF1</color>
+    <color name="text_secondary">#B0BEC5</color>
+    <color name="background">#121212</color>
+    <color name="surface">#1E1E1E</color>
+    <color name="divider">#2C2C2C</color>
+</resources>
