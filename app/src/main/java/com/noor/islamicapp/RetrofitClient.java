@@ -19,8 +19,8 @@ public class RetrofitClient {
 
             OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor(logging)
-                    .followRedirects(true)        // <-- KEY FIX
-                    .followSslRedirects(true)     // <-- KEY FIX
+                    .followRedirects(true)
+                    .followSslRedirects(true)
                     .connectTimeout(20, TimeUnit.SECONDS)
                     .readTimeout(20, TimeUnit.SECONDS)
                     .build();
