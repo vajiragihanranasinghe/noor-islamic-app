@@ -29,7 +29,6 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View v, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
-
         prefs = requireContext().getSharedPreferences("noor_settings", Context.MODE_PRIVATE);
 
         Switch swDark   = v.findViewById(R.id.swDark);
@@ -38,6 +37,8 @@ public class SettingsFragment extends Fragment {
         TextView tvMethod  = v.findViewById(R.id.tvMethodValue);
         TextView tvMadhab  = v.findViewById(R.id.tvMadhab);
         TextView tvHighLat = v.findViewById(R.id.tvHighLat);
+        TextView tvExact   = v.findViewById(R.id.tvExactAlarm);
+        TextView tvTest    = v.findViewById(R.id.tvTestNotif);
         TextView tvVersion = v.findViewById(R.id.tvVersion);
         TextView tvReset   = v.findViewById(R.id.tvReset);
 
@@ -103,7 +104,27 @@ public class SettingsFragment extends Fragment {
             });
         }
 
-        if (tvVersion != null) tvVersion.setText("Noor Islamic Companion v1.3.0");
+        if (tvExact != null) {
+            tvExact.setOnClickListener(x -> {
+                if (!AlarmPermissionHelper.canScheduleExact(requireContext())) {
+                    AlarmPermissionHelper.openExactAlarmSettings(requireContext());
+                } else {
+                    Toast.makeText(requireContext(),
+                            "Exact alarms already allowed", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        if (tvTest != null) {
+            tvTest.setOnClickListener(x -> {
+                NotificationHelper.createChannel(requireContext());
+                NotificationHelper.scheduleTestNotification(requireContext());
+                Toast.makeText(requireContext(),
+                        "Test notification in 5 seconds...", Toast.LENGTH_SHORT).show();
+            });
+        }
+
+        if (tvVersion != null) tvVersion.setText("Noor Islamic Companion v1.4.0");
 
         if (tvReset != null) {
             tvReset.setOnClickListener(x -> {

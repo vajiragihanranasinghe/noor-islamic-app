@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -18,6 +19,7 @@ public class NotificationHelper {
 
     public static final String CHANNEL_ID = "noor_adhan_channel";
     public static final String CHANNEL_NAME = "Prayer Notifications";
+    private static final String TAG = "NoorNotif";
 
     public static void createChannel(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -26,6 +28,8 @@ public class NotificationHelper {
                     CHANNEL_NAME,
                     NotificationManager.IMPORTANCE_HIGH);
             channel.setDescription("Adhan notifications for the 5 daily prayers");
+            channel.enableVibration(true);
+            channel.setShowBadge(true);
             NotificationManager nm = context.getSystemService(NotificationManager.class);
             if (nm != null) nm.createNotificationChannel(channel);
         }
@@ -39,18 +43,52 @@ public class NotificationHelper {
 
         NotificationCompat.Builder b = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("🕌 " + prayer + " Prayer Time")
+                .setContentTitle("Prayer Time: " + prayer)
                 .setContentText("It's time for " + prayer + " (" + time + ")")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setAutoCancel(true)
                 .setContentIntent(pi);
 
         try {
             NotificationManagerCompat.from(context).notify(prayer.hashCode(), b.build());
-        } catch (SecurityException ignored) { }
+            Log.d(TAG, "Notification shown: " + prayer);
+        } catch (SecurityException e) {
+            Log.e(TAG, "Notification permission denied: " + e.getMessage());
+        }
     }
 
-    // Schedule a prayer notification at a specific hour:minute (24-hour)
+    /** Immediately show a test notification (in ~5 seconds). */
+    public static void scheduleTestNotification(Context context) {
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (am == null) return;
+
+        Intent intent = new Intent(context, PrayerReceiver.class);
+        intent.putExtra("prayer", "Test");
+        intent.putExtra("time", "Now");
+
+        PendingIntent pi = PendingIntent.getBroadcast(
+                context, 999999, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        long when = System.currentTimeMillis() + 5000;
+
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (am.canScheduleExactAlarms()) {
+                    am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, when, pi);
+                } else {
+                    am.set(AlarmManager.RTC_WAKEUP, when, pi);
+                }
+            } else {
+                am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, when, pi);
+            }
+            Log.d(TAG, "Test notification scheduled for +5s");
+        } catch (SecurityException e) {
+            Log.e(TAG, "Cannot schedule exact alarm: " + e.getMessage());
+        }
+    }
+
     public static void schedulePrayer(Context context, String prayer, int hour, int minute) {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (am == null) return;
@@ -61,8 +99,7 @@ public class NotificationHelper {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
 
-        // If time has passed today, schedule for tomorrow
-        if (cal.getTimeInMillis() < System.currentTimeMillis()) {
+        if (cal.getTimeInMillis() <= System.currentTimeMillis() + 1000) {
             cal.add(Calendar.DAY_OF_YEAR, 1);
         }
 
@@ -74,10 +111,20 @@ public class NotificationHelper {
                 context, prayer.hashCode(), intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pi);
-        } else {
-            am.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pi);
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (am.canScheduleExactAlarms()) {
+                    am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pi);
+                    Log.d(TAG, "Exact alarm set for " + prayer + " at " + hour + ":" + minute);
+                } else {
+                    am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pi);
+                    Log.w(TAG, "Inexact alarm (permission missing) for " + prayer);
+                }
+            } else {
+                am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pi);
+            }
+        } catch (SecurityException e) {
+            Log.e(TAG, "Cannot schedule alarm for " + prayer + ": " + e.getMessage());
         }
     }
 
@@ -88,13 +135,14 @@ public class NotificationHelper {
             String time = intent.getStringExtra("time");
             if (prayer != null) {
                 showPrayerNotification(context, prayer, time != null ? time : "");
-                // Reschedule for tomorrow
-                try {
-                    String[] parts = time.split(":");
-                    schedulePrayer(context, prayer,
-                            Integer.parseInt(parts[0]),
-                            Integer.parseInt(parts[1]));
-                } catch (Exception ignored) { }
+                if (!"Test".equals(prayer) && time != null && time.contains(":")) {
+                    try {
+                        String[] parts = time.split(":");
+                        schedulePrayer(context, prayer,
+                                Integer.parseInt(parts[0]),
+                                Integer.parseInt(parts[1]));
+                    } catch (Exception ignored) { }
+                }
             }
         }
     }
