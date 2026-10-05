@@ -234,6 +234,11 @@ public class HomeFragment extends Fragment {
         tvStatus.setVisibility(View.GONE);
 
         calculateNextPrayer(list);
+        if (nextPrayer != null) {
+            adapter.setNextPrayer(nextPrayer.name);
+        } else {
+            adapter.setNextPrayer(null);
+        }
         scheduleNotifications(list);
     }
 
