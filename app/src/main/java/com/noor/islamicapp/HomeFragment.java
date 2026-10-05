@@ -163,7 +163,7 @@ public class HomeFragment extends Fragment {
                                             new Gson().toJson(response.body())).apply();
                             bindData(response.body());
                         } else {
-                            tvStatus.setText("Failed to load (bad response)");
+                            tvStatus.setText("Failed: HTTP " + response.code() + " — " + response.message());
                         }
                     }
                     @Override public void onFailure(@NonNull Call<PrayerTimesResponse> call,
