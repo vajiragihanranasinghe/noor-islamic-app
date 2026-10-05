@@ -17,6 +17,17 @@ public class PrayerAdapter extends RecyclerView.Adapter<PrayerAdapter.VH> {
 
     private List<Prayer> items;
     private String nextPrayerName = null;
+    private String currentPrayerName = null;
+
+    public interface OnPrayerClickListener {
+        void onPrayerClick(Prayer prayer);
+    }
+
+    private OnPrayerClickListener clickListener;
+
+    public void setOnPrayerClickListener(OnPrayerClickListener listener) {
+        this.clickListener = listener;
+    }
 
     public PrayerAdapter(List<Prayer> items) {
         this.items = items;
@@ -29,6 +40,11 @@ public class PrayerAdapter extends RecyclerView.Adapter<PrayerAdapter.VH> {
 
     public void setNextPrayer(String prayerName) {
         this.nextPrayerName = prayerName;
+        notifyDataSetChanged();
+    }
+
+    public void setCurrentPrayer(String prayerName) {
+        this.currentPrayerName = prayerName;
         notifyDataSetChanged();
     }
 
@@ -51,7 +67,19 @@ public class PrayerAdapter extends RecyclerView.Adapter<PrayerAdapter.VH> {
 
         Prayer p = items.get(position);
 
+        boolean prayed =
+                SalahPrefs.isCompleted(
+                        h.itemView.getContext(),
+                        p.name
+                );
+
         h.tvIcon.setText(p.icon);
+
+        h.itemView.setOnClickListener(v -> {
+            if (clickListener != null) {
+                clickListener.onPrayerClick(p);
+            }
+        });
         h.tvName.setText(p.name);
         h.tvTime.setText(p.time);
 
@@ -59,12 +87,16 @@ public class PrayerAdapter extends RecyclerView.Adapter<PrayerAdapter.VH> {
                 nextPrayerName != null &&
                 nextPrayerName.equals(p.name);
 
-        if (isNext) {
+        boolean isCurrent =
+                currentPrayerName != null &&
+                currentPrayerName.equals(p.name);
+
+        if (prayed) {
 
             h.tvName.setText(
                     String.format(
                             Locale.getDefault(),
-                            "⭐ %s",
+                            "✓ %s  • PRAYED",
                             p.name
                     )
             );
@@ -83,15 +115,66 @@ public class PrayerAdapter extends RecyclerView.Adapter<PrayerAdapter.VH> {
                     )
             );
 
-            h.tvName.setTypeface(
-                    null,
-                    Typeface.BOLD
+            h.tvName.setTypeface(null, Typeface.BOLD);
+            h.tvTime.setTypeface(null, Typeface.BOLD);
+
+            h.itemView.setAlpha(1.0f);
+
+        } else if (isCurrent) {
+
+            h.tvName.setText(
+                    String.format(
+                            Locale.getDefault(),
+                            "🟢 %s  • CURRENT",
+                            p.name
+                    )
             );
 
-            h.tvTime.setTypeface(
-                    null,
-                    Typeface.BOLD
+            h.tvName.setTextColor(
+                    ContextCompat.getColor(
+                            h.itemView.getContext(),
+                            R.color.primary
+                    )
             );
+
+            h.tvTime.setTextColor(
+                    ContextCompat.getColor(
+                            h.itemView.getContext(),
+                            R.color.primary
+                    )
+            );
+
+            h.tvName.setTypeface(null, Typeface.BOLD);
+            h.tvTime.setTypeface(null, Typeface.BOLD);
+
+            h.itemView.setAlpha(1.0f);
+
+        } else if (isNext) {
+
+            h.tvName.setText(
+                    String.format(
+                            Locale.getDefault(),
+                            "⭐ %s  • NEXT",
+                            p.name
+                    )
+            );
+
+            h.tvName.setTextColor(
+                    ContextCompat.getColor(
+                            h.itemView.getContext(),
+                            R.color.primary
+                    )
+            );
+
+            h.tvTime.setTextColor(
+                    ContextCompat.getColor(
+                            h.itemView.getContext(),
+                            R.color.primary
+                    )
+            );
+
+            h.tvName.setTypeface(null, Typeface.BOLD);
+            h.tvTime.setTypeface(null, Typeface.BOLD);
 
             h.itemView.setAlpha(1.0f);
 
@@ -113,15 +196,8 @@ public class PrayerAdapter extends RecyclerView.Adapter<PrayerAdapter.VH> {
                     )
             );
 
-            h.tvName.setTypeface(
-                    null,
-                    Typeface.BOLD
-            );
-
-            h.tvTime.setTypeface(
-                    null,
-                    Typeface.BOLD
-            );
+            h.tvName.setTypeface(null, Typeface.BOLD);
+            h.tvTime.setTypeface(null, Typeface.BOLD);
 
             h.itemView.setAlpha(0.92f);
         }

@@ -15,6 +15,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,6 +41,9 @@ public class HomeFragment extends Fragment {
 
     private TextView tvLocation, tvHijriDate, tvGregorianDate;
     private TextView tvNextPrayerName, tvNextPrayerTime, tvNextPrayerCountdown;
+    private TextView tvProgressFajr, tvProgressDhuhr, tvProgressAsr, tvProgressMaghrib, tvProgressIsha;
+    private TextView tvPrayerProgressSummary;
+    private android.widget.ProgressBar prayerProgressBar;
     private TextView tvStatus, tvMethod;
     private ImageView btnRefresh;
     private RecyclerView rvPrayers;
@@ -50,6 +54,7 @@ public class HomeFragment extends Fragment {
     private final Handler ticker = new Handler(Looper.getMainLooper());
     private Prayer nextPrayer;
     private Runnable tickRunnable;
+    private List<Prayer> todayPrayerList = new ArrayList<>();
 
     private final ActivityResultLauncher<String[]> permissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
@@ -78,8 +83,32 @@ public class HomeFragment extends Fragment {
         tvMethod              = v.findViewById(R.id.tvMethod);
         btnRefresh            = v.findViewById(R.id.btnRefresh);
         rvPrayers             = v.findViewById(R.id.rvPrayers);
+        tvProgressFajr        = v.findViewById(R.id.tvProgressFajr);
+        tvProgressDhuhr       = v.findViewById(R.id.tvProgressDhuhr);
+        tvProgressAsr         = v.findViewById(R.id.tvProgressAsr);
+        tvProgressMaghrib     = v.findViewById(R.id.tvProgressMaghrib);
+        tvProgressIsha        = v.findViewById(R.id.tvProgressIsha);
+        tvPrayerProgressSummary = v.findViewById(R.id.tvPrayerProgressSummary);
+        prayerProgressBar     = v.findViewById(R.id.prayerProgressBar);
 
         adapter = new PrayerAdapter(new ArrayList<>());
+
+        adapter.setOnPrayerClickListener(prayer -> {
+            boolean alreadyCompleted =
+                    SalahPrefs.isCompleted(
+                            requireContext(),
+                            prayer.name
+                    );
+
+            SalahPrefs.setCompleted(
+                    requireContext(),
+                    prayer.name,
+                    !alreadyCompleted
+            );
+
+            adapter.notifyDataSetChanged();
+            updatePrayerProgress();
+        });
         rvPrayers.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvPrayers.setAdapter(adapter);
 
@@ -94,6 +123,7 @@ public class HomeFragment extends Fragment {
         tickRunnable = new Runnable() {
             @Override public void run() {
                 updateCountdown();
+                updatePrayerProgress();
                 ticker.postDelayed(this, 1000);
             }
         };
@@ -231,6 +261,7 @@ public class HomeFragment extends Fragment {
             list.add(new Prayer("Isha",    clean(t.isha),    "I"));
         }
         adapter.setItems(list);
+        todayPrayerList = new ArrayList<>(list);
         tvStatus.setVisibility(View.GONE);
 
         calculateNextPrayer(list);
@@ -238,6 +269,7 @@ public class HomeFragment extends Fragment {
             adapter.setNextPrayer(nextPrayer.name);
         } else {
             adapter.setNextPrayer(null);
+        adapter.setCurrentPrayer(calculateCurrentPrayer(list));
         }
         scheduleNotifications(list);
     }
@@ -293,7 +325,134 @@ public class HomeFragment extends Fragment {
             tvNextPrayerName.setText(next.name);
             tvNextPrayerTime.setText(next.time);
             updateCountdown();
+                updatePrayerProgress();
         }
+    }
+
+    private void updateCurrentPrayerState() {
+        if (adapter == null) return;
+
+        String current = null;
+
+        if (nextPrayer != null) {
+            int nextMin = toMinutes24(nextPrayer.time);
+            Calendar now = Calendar.getInstance();
+            int nowMin = now.get(Calendar.HOUR_OF_DAY) * 60
+                    + now.get(Calendar.MINUTE);
+
+            List<Prayer> currentList = new ArrayList<>();
+
+            if (rvPrayers != null) {
+                for (int i = 0; i < adapter.getItemCount(); i++) {
+                    RecyclerView.ViewHolder holder =
+                            rvPrayers.findViewHolderForAdapterPosition(i);
+                }
+            }
+
+            if (nowMin < nextMin) {
+                String[] realNames = {"Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"};
+                for (String name : realNames) {
+                    if (name.equals(nextPrayer.name)) break;
+                }
+            }
+        }
+
+        adapter.setCurrentPrayer(current);
+    }
+
+    private String calculateCurrentPrayer(List<Prayer> list) {
+        Calendar now = Calendar.getInstance();
+        int nowMin = now.get(Calendar.HOUR_OF_DAY) * 60
+                + now.get(Calendar.MINUTE);
+
+        String[] realNames = {"Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"};
+
+        Prayer previous = null;
+
+        for (String name : realNames) {
+            for (Prayer p : list) {
+                if (p.name.equals(name)) {
+                    int pMin = toMinutes24(p.time);
+                    if (pMin <= nowMin) {
+                        previous = p;
+                    }
+                    break;
+                }
+            }
+        }
+
+        if (previous != null) {
+            return previous.name;
+        }
+
+        return null;
+    }
+
+    private void updatePrayerProgress() {
+        if (todayPrayerList == null || todayPrayerList.isEmpty()) return;
+
+        String[] names = {"Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"};
+
+        TextView[] views = {
+                tvProgressFajr,
+                tvProgressDhuhr,
+                tvProgressAsr,
+                tvProgressMaghrib,
+                tvProgressIsha
+        };
+
+        int completed = 0;
+
+        for (int i = 0; i < names.length; i++) {
+
+            boolean prayed = SalahPrefs.isCompleted(
+                    requireContext(),
+                    names[i]
+            );
+
+            if (prayed) {
+                completed++;
+
+                views[i].setText("✓ " + names[i]);
+                views[i].setTextColor(
+                        ContextCompat.getColor(
+                                requireContext(),
+                                R.color.primary
+                        )
+                );
+
+            } else if (nextPrayer != null
+                    && nextPrayer.name.equals(names[i])) {
+
+                views[i].setText("⭐ " + names[i]);
+                views[i].setTextColor(
+                        ContextCompat.getColor(
+                                requireContext(),
+                                R.color.primary
+                        )
+                );
+
+            } else {
+
+                views[i].setText(names[i]);
+                views[i].setTextColor(
+                        ContextCompat.getColor(
+                                requireContext(),
+                                R.color.text_secondary
+                        )
+                );
+            }
+        }
+
+        prayerProgressBar.setProgress(completed);
+
+        tvPrayerProgressSummary.setText(
+                String.format(
+                        Locale.getDefault(),
+                        "%d of 5 prayers prayed",
+                        completed
+                )
+        );
     }
 
     private void updateCountdown() {
