@@ -12,11 +12,12 @@ import java.util.Set;
 public class SalahPrefs {
 
     private static final String PREFS = "salah_tracker";
-    private static final String KEY_DATE = "date";
-    private static final String KEY_COMPLETED = "completed";
 
     private static SharedPreferences prefs(Context context) {
-        return context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        return context.getSharedPreferences(
+                PREFS,
+                Context.MODE_PRIVATE
+        );
     }
 
     private static String today() {
@@ -26,28 +27,30 @@ public class SalahPrefs {
         ).format(new Date());
     }
 
-    private static void ensureToday(Context context) {
-        SharedPreferences p = prefs(context);
-        String savedDate = p.getString(KEY_DATE, "");
-
-        if (!today().equals(savedDate)) {
-            p.edit()
-                    .putString(KEY_DATE, today())
-                    .remove(KEY_COMPLETED)
-                    .apply();
-        }
+    private static String keyForDate(String date) {
+        return "completed_" + date;
     }
 
-    public static boolean isCompleted(Context context, String prayerName) {
-        ensureToday(context);
-
-        Set<String> completed =
+    private static Set<String> getCompletedForDate(
+            Context context,
+            String date
+    ) {
+        return new HashSet<>(
                 prefs(context).getStringSet(
-                        KEY_COMPLETED,
+                        keyForDate(date),
                         new HashSet<>()
-                );
+                )
+        );
+    }
 
-        return completed.contains(prayerName);
+    public static boolean isCompleted(
+            Context context,
+            String prayerName
+    ) {
+        return getCompletedForDate(
+                context,
+                today()
+        ).contains(prayerName);
     }
 
     public static void setCompleted(
@@ -55,17 +58,12 @@ public class SalahPrefs {
             String prayerName,
             boolean completed
     ) {
-        ensureToday(context);
-
         SharedPreferences p = prefs(context);
 
+        String date = today();
+
         Set<String> current =
-                new HashSet<>(
-                        p.getStringSet(
-                                KEY_COMPLETED,
-                                new HashSet<>()
-                        )
-                );
+                getCompletedForDate(context, date);
 
         if (completed) {
             current.add(prayerName);
@@ -74,18 +72,40 @@ public class SalahPrefs {
         }
 
         p.edit()
-                .putStringSet(KEY_COMPLETED, current)
+                .putStringSet(
+                        keyForDate(date),
+                        current
+                )
                 .apply();
     }
 
-    public static int completedCount(Context context) {
-        ensureToday(context);
+    public static int completedCount(
+            Context context
+    ) {
+        return getCompletedForDate(
+                context,
+                today()
+        ).size();
+    }
 
-        return prefs(context)
-                .getStringSet(
-                        KEY_COMPLETED,
-                        new HashSet<>()
-                )
-                .size();
+    public static int completedCountForDate(
+            Context context,
+            String date
+    ) {
+        return getCompletedForDate(
+                context,
+                date
+        ).size();
+    }
+
+    public static boolean isCompletedForDate(
+            Context context,
+            String date,
+            String prayerName
+    ) {
+        return getCompletedForDate(
+                context,
+                date
+        ).contains(prayerName);
     }
 }
