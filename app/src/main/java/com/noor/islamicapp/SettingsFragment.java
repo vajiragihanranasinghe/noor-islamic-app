@@ -17,11 +17,6 @@ import androidx.fragment.app.Fragment;
 
 public class SettingsFragment extends Fragment {
 
-    private static final String PREFS = "noor_settings";
-    private static final String KEY_DARK = "dark_mode";
-    private static final String KEY_NOTIF = "notifications";
-    private static final String KEY_METHOD = "method";
-
     private SharedPreferences prefs;
 
     @Nullable
@@ -35,72 +30,87 @@ public class SettingsFragment extends Fragment {
     public void onViewCreated(@NonNull View v, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
 
-        prefs = requireContext().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        prefs = requireContext().getSharedPreferences("noor_settings", Context.MODE_PRIVATE);
 
-        Switch swDark = v.findViewById(R.id.swDark);
-        Switch swNotif = v.findViewById(R.id.swNotif);
-        TextView tvMethod = v.findViewById(R.id.tvMethodValue);
+        Switch swDark   = v.findViewById(R.id.swDark);
+        Switch swNotif  = v.findViewById(R.id.swNotif);
+        Switch swAuto   = v.findViewById(R.id.swAuto);
+        TextView tvMethod  = v.findViewById(R.id.tvMethodValue);
+        TextView tvMadhab  = v.findViewById(R.id.tvMadhab);
+        TextView tvHighLat = v.findViewById(R.id.tvHighLat);
         TextView tvVersion = v.findViewById(R.id.tvVersion);
-        TextView tvReset = v.findViewById(R.id.tvReset);
+        TextView tvReset   = v.findViewById(R.id.tvReset);
 
-        swDark.setChecked(prefs.getBoolean(KEY_DARK, false));
-        swNotif.setChecked(prefs.getBoolean(KEY_NOTIF, true));
-
-        int method = prefs.getInt(KEY_METHOD, 3);
-        tvMethod.setText(methodName(method));
-        tvVersion.setText("Noor Islamic Companion v1.0.0");
-
-        // Prevent toggle from firing on initial setup
-        swDark.setOnCheckedChangeListener(null);
-        swDark.setChecked(prefs.getBoolean(KEY_DARK, false));
+        swDark.setChecked(prefs.getBoolean("dark_mode", false));
         swDark.setOnCheckedChangeListener((b, checked) -> {
-            prefs.edit().putBoolean(KEY_DARK, checked).apply();
+            prefs.edit().putBoolean("dark_mode", checked).apply();
             AppCompatDelegate.setDefaultNightMode(checked
                     ? AppCompatDelegate.MODE_NIGHT_YES
                     : AppCompatDelegate.MODE_NIGHT_NO);
-            // Activity recreates automatically — no toast needed
         });
 
+        swNotif.setChecked(prefs.getBoolean("notifications", true));
         swNotif.setOnCheckedChangeListener((b, checked) -> {
-            prefs.edit().putBoolean(KEY_NOTIF, checked).apply();
+            prefs.edit().putBoolean("notifications", checked).apply();
             Toast.makeText(requireContext(),
                     checked ? "Notifications enabled" : "Notifications disabled",
                     Toast.LENGTH_SHORT).show();
         });
 
-        final int[] methods = {3, 2, 4, 5, 1};
-        final String[] methodNames = {
-                "Muslim World League", "ISNA (North America)",
-                "Umm al-Qura (Makkah)", "Egyptian General Authority",
-                "University of Islamic Sciences, Karachi"
-        };
-        tvMethod.setOnClickListener(x -> {
-            int current = prefs.getInt(KEY_METHOD, 3);
-            int idx = 0;
-            for (int i = 0; i < methods.length; i++) {
-                if (methods[i] == current) { idx = i; break; }
-            }
-            idx = (idx + 1) % methods.length;
-            prefs.edit().putInt(KEY_METHOD, methods[idx]).apply();
-            tvMethod.setText(methodNames[idx]);
-            Toast.makeText(requireContext(), "Calculation: " + methodNames[idx], Toast.LENGTH_SHORT).show();
-        });
+        if (swAuto != null) {
+            swAuto.setChecked(prefs.getBoolean(PrayerPrefs.KEY_AUTO, true));
+            swAuto.setOnCheckedChangeListener((b, checked) -> {
+                prefs.edit().putBoolean(PrayerPrefs.KEY_AUTO, checked).apply();
+                Toast.makeText(requireContext(),
+                        checked ? "Auto method enabled" : "Manual mode",
+                        Toast.LENGTH_SHORT).show();
+            });
+        }
 
-        tvReset.setOnClickListener(x -> {
-            prefs.edit().clear().apply();
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            Toast.makeText(requireContext(), "Settings reset", Toast.LENGTH_SHORT).show();
-        });
-    }
+        int method = prefs.getInt(PrayerPrefs.KEY_METHOD, 3);
+        if (tvMethod != null) {
+            tvMethod.setText(MethodResolver.describeMethod(method));
+            tvMethod.setOnClickListener(x -> {
+                int cur = prefs.getInt(PrayerPrefs.KEY_METHOD, 3);
+                int[] methods = {1, 2, 3, 4, 5, 7, 13, 16, 17};
+                int idx = 0;
+                for (int i = 0; i < methods.length; i++) if (methods[i] == cur) { idx = i; break; }
+                idx = (idx + 1) % methods.length;
+                prefs.edit().putInt(PrayerPrefs.KEY_METHOD, methods[idx]).apply();
+                tvMethod.setText(MethodResolver.describeMethod(methods[idx]));
+            });
+        }
 
-    private String methodName(int id) {
-        switch (id) {
-            case 2: return "ISNA (North America)";
-            case 3: return "Muslim World League";
-            case 4: return "Umm al-Qura (Makkah)";
-            case 5: return "Egyptian General Authority";
-            case 1: return "University of Islamic Sciences, Karachi";
-            default: return "Muslim World League";
+        if (tvMadhab != null) {
+            int school = prefs.getInt(PrayerPrefs.KEY_SCHOOL, 0);
+            tvMadhab.setText(MethodResolver.describeMadhab(school));
+            tvMadhab.setOnClickListener(x -> {
+                int s = prefs.getInt(PrayerPrefs.KEY_SCHOOL, 0);
+                s = (s == 0) ? 1 : 0;
+                prefs.edit().putInt(PrayerPrefs.KEY_SCHOOL, s).apply();
+                tvMadhab.setText(MethodResolver.describeMadhab(s));
+            });
+        }
+
+        if (tvHighLat != null) {
+            int hl = prefs.getInt(PrayerPrefs.KEY_HIGHLAT, 0);
+            tvHighLat.setText(MethodResolver.describeHighLat(hl));
+            tvHighLat.setOnClickListener(x -> {
+                int h = prefs.getInt(PrayerPrefs.KEY_HIGHLAT, 0);
+                h = (h + 1) % 4;
+                prefs.edit().putInt(PrayerPrefs.KEY_HIGHLAT, h).apply();
+                tvHighLat.setText(MethodResolver.describeHighLat(h));
+            });
+        }
+
+        if (tvVersion != null) tvVersion.setText("Noor Islamic Companion v1.3.0");
+
+        if (tvReset != null) {
+            tvReset.setOnClickListener(x -> {
+                prefs.edit().clear().apply();
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                Toast.makeText(requireContext(), "Settings reset", Toast.LENGTH_SHORT).show();
+            });
         }
     }
 }

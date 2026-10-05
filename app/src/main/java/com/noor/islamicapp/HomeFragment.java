@@ -68,16 +68,16 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View v, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
 
-        tvLocation           = v.findViewById(R.id.tvLocation);
-        tvHijriDate          = v.findViewById(R.id.tvHijriDate);
-        tvGregorianDate      = v.findViewById(R.id.tvGregorianDate);
-        tvNextPrayerName     = v.findViewById(R.id.tvNextPrayerName);
-        tvNextPrayerTime     = v.findViewById(R.id.tvNextPrayerTime);
-        tvNextPrayerCountdown= v.findViewById(R.id.tvNextPrayerCountdown);
-        tvStatus             = v.findViewById(R.id.tvStatus);
-        tvMethod             = v.findViewById(R.id.tvMethod);
-        btnRefresh           = v.findViewById(R.id.btnRefresh);
-        rvPrayers            = v.findViewById(R.id.rvPrayers);
+        tvLocation            = v.findViewById(R.id.tvLocation);
+        tvHijriDate           = v.findViewById(R.id.tvHijriDate);
+        tvGregorianDate       = v.findViewById(R.id.tvGregorianDate);
+        tvNextPrayerName      = v.findViewById(R.id.tvNextPrayerName);
+        tvNextPrayerTime      = v.findViewById(R.id.tvNextPrayerTime);
+        tvNextPrayerCountdown = v.findViewById(R.id.tvNextPrayerCountdown);
+        tvStatus              = v.findViewById(R.id.tvStatus);
+        tvMethod              = v.findViewById(R.id.tvMethod);
+        btnRefresh            = v.findViewById(R.id.btnRefresh);
+        rvPrayers             = v.findViewById(R.id.rvPrayers);
 
         adapter = new PrayerAdapter(new ArrayList<>());
         rvPrayers.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -91,7 +91,6 @@ public class HomeFragment extends Fragment {
         NotificationHelper.createChannel(requireContext());
         locationHelper = new LocationHelper(requireActivity());
 
-        // start the 1-second ticker
         tickRunnable = new Runnable() {
             @Override public void run() {
                 updateCountdown();
@@ -108,7 +107,6 @@ public class HomeFragment extends Fragment {
     @Override public void onResume() {
         super.onResume();
         if (tickRunnable != null) ticker.post(tickRunnable);
-        // reload if user changed settings
         loadLocationAndPrayers();
     }
 
@@ -119,11 +117,11 @@ public class HomeFragment extends Fragment {
 
     private void loadLocationAndPrayers() {
         tvStatus.setVisibility(View.VISIBLE);
-        tvStatus.setText("Detecting location…");
+        tvStatus.setText("Detecting location...");
         locationHelper.getCurrentLocation(new LocationHelper.LocationCallbackListener() {
             @Override public void onLocationReceived(double lat, double lon, String cityName) {
                 if (!isAdded()) return;
-                tvLocation.setText("📍 " + cityName);
+                tvLocation.setText("Location: " + cityName);
                 PrayerPrefs.save(requireContext(), cityName, lat, lon);
                 fetchPrayerTimes(lat, lon);
             }
@@ -139,17 +137,26 @@ public class HomeFragment extends Fragment {
         double lat = PrayerPrefs.lat(requireContext());
         double lon = PrayerPrefs.lon(requireContext());
         if (label.equals("Colombo, Sri Lanka")) label = DEFAULT_CITY + " (default)";
-        tvLocation.setText("📍 " + label);
+        tvLocation.setText("Location: " + label);
         fetchPrayerTimes(lat, lon);
     }
 
     private void fetchPrayerTimes(double lat, double lon) {
         tvStatus.setVisibility(View.VISIBLE);
-        tvStatus.setText("Loading prayer times…");
+        tvStatus.setText("Loading prayer times...");
 
-        int method   = PrayerPrefs.method(requireContext());
-        int school   = PrayerPrefs.school(requireContext());
-        int highLat  = PrayerPrefs.highLat(requireContext());
+        int method, school, highLat;
+
+        if (PrayerPrefs.autoMode(requireContext())) {
+            method  = MethodResolver.methodFor(lat, lon);
+            school  = MethodResolver.madhabFor(lat, lon);
+            highLat = MethodResolver.highLatFor(lat);
+            PrayerPrefs.saveAuto(requireContext(), method, school, highLat);
+        } else {
+            method  = PrayerPrefs.method(requireContext());
+            school  = PrayerPrefs.school(requireContext());
+            highLat = PrayerPrefs.highLat(requireContext());
+        }
 
         RetrofitClient.getApi()
                 .getTimings(lat, lon, method, school, highLat)
@@ -163,20 +170,19 @@ public class HomeFragment extends Fragment {
                                             new Gson().toJson(response.body())).apply();
                             bindData(response.body());
                         } else {
-                            tvStatus.setText("Failed: HTTP " + response.code() + " — " + response.message());
+                            tvStatus.setText("Failed: HTTP " + response.code() + " - " + response.message());
                         }
                     }
                     @Override public void onFailure(@NonNull Call<PrayerTimesResponse> call,
                                                     @NonNull Throwable t) {
                         if (!isAdded()) return;
-                        // try cache
                         String cached = PrayerPrefs.get(requireContext())
                                 .getString(PrayerPrefs.KEY_LAST_JSON, null);
                         if (cached != null) {
                             try {
                                 PrayerTimesResponse r = new Gson().fromJson(cached, PrayerTimesResponse.class);
                                 bindData(r);
-                                tvStatus.setText("Offline — showing cached times");
+                                tvStatus.setText("Offline - showing cached times");
                                 return;
                             } catch (Exception ignored) { }
                         }
@@ -205,20 +211,24 @@ public class HomeFragment extends Fragment {
             }
         }
 
-        String methodLabel = "Method: MWL · " +
-                (PrayerPrefs.school(requireContext()) == 1 ? "Hanafi" : "Shafi") +
-                (PrayerPrefs.highLat(requireContext()) > 0 ? " · HighLat " + PrayerPrefs.highLat(requireContext()) : "");
+        int m  = PrayerPrefs.method(requireContext());
+        int s  = PrayerPrefs.school(requireContext());
+        int hl = PrayerPrefs.highLat(requireContext());
+        String mode = PrayerPrefs.autoMode(requireContext()) ? "Auto" : "Manual";
+        String methodLabel = mode + ": " + MethodResolver.describeMethod(m)
+                + " - " + MethodResolver.describeMadhab(s)
+                + (hl > 0 ? " - " + MethodResolver.describeHighLat(hl) : "");
         tvMethod.setText(methodLabel);
 
         List<Prayer> list = new ArrayList<>();
         PrayerTimesResponse.Timings t = r.data.timings;
         if (t != null) {
-            list.add(new Prayer("Fajr",    clean(t.fajr),    "🌅"));
-            list.add(new Prayer("Sunrise", clean(t.sunrise), "☀️"));
-            list.add(new Prayer("Dhuhr",   clean(t.dhuhr),   "🕛"));
-            list.add(new Prayer("Asr",     clean(t.asr),     "🌤️"));
-            list.add(new Prayer("Maghrib", clean(t.maghrib), "🌆"));
-            list.add(new Prayer("Isha",    clean(t.isha),    "🌙"));
+            list.add(new Prayer("Fajr",    clean(t.fajr),    "F"));
+            list.add(new Prayer("Sunrise", clean(t.sunrise), "S"));
+            list.add(new Prayer("Dhuhr",   clean(t.dhuhr),   "D"));
+            list.add(new Prayer("Asr",     clean(t.asr),     "A"));
+            list.add(new Prayer("Maghrib", clean(t.maghrib), "M"));
+            list.add(new Prayer("Isha",    clean(t.isha),    "I"));
         }
         adapter.setItems(list);
         tvStatus.setVisibility(View.GONE);
@@ -275,7 +285,7 @@ public class HomeFragment extends Fragment {
 
         nextPrayer = next;
         if (next != null) {
-            tvNextPrayerName.setText(next.icon + "  " + next.name);
+            tvNextPrayerName.setText(next.name);
             tvNextPrayerTime.setText(next.time);
             updateCountdown();
         }

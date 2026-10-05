@@ -2,211 +2,146 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp"
-            android:background="@color/primary">
-
+            android:orientation="horizontal"
+            android:padding="16dp">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="⚙️  Settings"
-                android:textColor="@color/white"
-                android:textSize="22sp"
-                android:textStyle="bold" />
-
-            <TextView
+                android:layout_weight="1"
+                android:text="Dark mode"
+                android:textSize="16sp"/>
+            <Switch
+                android:id="@+id/swDark"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="Customize Noor to your preference"
-                android:textColor="@color/accent"
-                android:textSize="13sp" />
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
-        <!-- Dark mode -->
-        <androidx.cardview.widget.CardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="12dp"
-            app:cardBackgroundColor="@color/surface"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:padding="16dp">
+            <TextView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:padding="16dp">
+                android:layout_weight="1"
+                android:text="Prayer notifications"
+                android:textSize="16sp"/>
+            <Switch
+                android:id="@+id/swNotif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="🌙  Dark Mode"
-                    android:textColor="@color/text_primary"
-                    android:textSize="16sp" />
-
-                <Switch
-                    android:id="@+id/swDark"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Notifications -->
-        <androidx.cardview.widget.CardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="12dp"
-            app:cardBackgroundColor="@color/surface"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:padding="16dp">
+            <TextView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:padding="16dp">
+                android:layout_weight="1"
+                android:text="Auto method by GPS"
+                android:textSize="16sp"/>
+            <Switch
+                android:id="@+id/swAuto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="🔔  Prayer Notifications"
-                    android:textColor="@color/text_primary"
-                    android:textSize="16sp" />
-
-                <Switch
-                    android:id="@+id/swNotif"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Calculation method -->
-        <androidx.cardview.widget.CardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="12dp"
-            app:cardBackgroundColor="@color/surface"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:padding="16dp">
+            <TextView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:layout_weight="1"
+                android:text="Calculation method"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/tvMethodValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MWL"
+                android:textColor="?attr/colorPrimary"
+                android:textStyle="bold"
+                android:padding="8dp"/>
+        </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="🕌  Prayer Calculation Method"
-                    android:textColor="@color/text_primary"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/tvMethodValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Muslim World League"
-                    android:textColor="@color/primary"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Tap to cycle through methods"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="12sp" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- App version -->
-        <androidx.cardview.widget.CardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="12dp"
-            app:cardBackgroundColor="@color/surface"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:padding="16dp">
+            <TextView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:layout_weight="1"
+                android:text="Madhab (Asr)"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/tvMadhab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Shafi"
+                android:textColor="?attr/colorPrimary"
+                android:textStyle="bold"
+                android:padding="8dp"/>
+        </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="📱  About Noor"
-                    android:textColor="@color/text_primary"
-                    android:textSize="16sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="High-latitude rule"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/tvHighLat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="None"
+                android:textColor="?attr/colorPrimary"
+                android:textStyle="bold"
+                android:padding="8dp"/>
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tvVersion"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Noor Islamic Companion v1.0.0"
-                    android:textColor="@color/primary"
-                    android:textSize="14sp" />
+        <TextView
+            android:id="@+id/tvVersion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Noor Islamic Companion v1.3.0"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:textColor="#666666"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Made with ❤️ for the Ummah"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="12sp" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Reset -->
         <TextView
             android:id="@+id/tvReset"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_margin="12dp"
-            android:background="@drawable/bg_outline_button"
-            android:gravity="center"
-            android:text="Reset All Settings"
-            android:textColor="@color/primary"
-            android:textSize="15sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
+            android:padding="16dp"
+            android:text="Reset all settings"
+            android:textSize="14sp"
             android:gravity="center"
-            android:text="🔖 Credits &amp; Data Sources\n\nQuran text: Tanzil.net\nPrayer times: Aladhan.com\nTranslation: Pickthall (public domain)\n\nJazakAllah khair for using Noor."
-            android:textAlignment="center"
-            android:paddingHorizontal="24dp"
-            android:textColor="@color/text_secondary"
-            android:textSize="11sp"
-            android:lineSpacingExtra="2dp" />
-
+            android:textColor="#C62828"/>
     </LinearLayout>
 </ScrollView>
