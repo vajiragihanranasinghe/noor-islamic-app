@@ -11,14 +11,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingStart="16dp"
+        android:paddingTop="14dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="24dp">
 
-        <!-- Header: App name + location -->
+        <!-- Header -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -31,36 +34,40 @@
                     android:layout_height="wrap_content"
                     android:text="Noor"
                     android:textColor="@color/primary"
-                    android:textSize="26sp"
+                    android:textSize="28sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvLocation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
                     android:text="📍 Detecting location…"
                     android:textColor="@color/text_secondary"
                     android:textSize="13sp" />
+
             </LinearLayout>
 
             <ImageView
                 android:id="@+id/btnRefresh"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:padding="8dp"
+                android:contentDescription="Refresh prayer times"
+                android:padding="9dp"
                 android:src="@android:drawable/ic_menu_rotate"
                 app:tint="@color/primary" />
+
         </LinearLayout>
 
-        <!-- Dates card -->
+        <!-- Date card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardBackgroundColor="@color/primary"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp">
+            app:cardCornerRadius="18dp"
+            app:cardElevation="3dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -69,12 +76,22 @@
                 android:padding="20dp">
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TODAY"
+                    android:textColor="@color/accent"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.18" />
+
+                <TextView
                     android:id="@+id/tvHijriDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
                     android:text="— Hijri date —"
                     android:textColor="@color/accent"
-                    android:textSize="18sp"
+                    android:textSize="19sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -85,93 +102,136 @@
                     android:text="— Gregorian date —"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
+
             </LinearLayout>
+
         </androidx.cardview.widget.CardView>
 
-        <!-- Next Prayer big card -->
+        <!-- Next prayer -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardBackgroundColor="@color/surface"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp">
+            app:cardCornerRadius="20dp"
+            app:cardElevation="3dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="22dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="NEXT PRAYER"
                     android:textColor="@color/accent_dark"
-                    android:textSize="12sp"
-                    android:letterSpacing="0.15"
-                    android:textStyle="bold" />
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.18" />
 
                 <TextView
                     android:id="@+id/tvNextPrayerName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="6dp"
                     android:text="—"
                     android:textColor="@color/primary"
-                    android:textSize="32sp"
+                    android:textSize="34sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvNextPrayerTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="2dp"
                     android:text="—"
                     android:textColor="@color/text_primary"
-                    android:textSize="22sp" />
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvNextPrayerCountdown"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text=""
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp" />
+                    android:layout_marginTop="12dp"
+                    android:gravity="center"
+                    android:text="in --h --m --s"
+                    android:textColor="@color/primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
             </LinearLayout>
+
         </androidx.cardview.widget.CardView>
 
-        <!-- Loading / error text -->
+        <!-- Section title -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Today's Prayer Times"
+                android:textColor="@color/text_primary"
+                android:textSize="19sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5 daily prayers"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <!-- Loading / offline / error status -->
         <TextView
             android:id="@+id/tvStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
             android:text="Loading prayer times…"
             android:textColor="@color/text_secondary"
-            android:textSize="14sp"
-            android:gravity="center" />
+            android:textSize="13sp" />
 
-        <!-- All prayers list -->
+        <!-- Prayer list -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPrayers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="10dp"
             android:nestedScrollingEnabled="false" />
 
-        <!-- Method footer -->
-        <TextView
-            android:id="@+id/tvMethod"
+        <!-- Calculation method -->
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="16dp"
-            android:text="Method: Muslim World League"
-            android:textColor="@color/text_secondary"
-            android:textSize="12sp"
-            android:gravity="center" />
+            android:layout_marginTop="14dp"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="1dp">
+
+            <TextView
+                android:id="@+id/tvMethod"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="14dp"
+                android:gravity="center"
+                android:text="Method: Muslim World League"
+                android:textColor="@color/text_secondary"
+                android:textSize="11sp" />
+
+        </androidx.cardview.widget.CardView>
 
     </LinearLayout>
+
 </androidx.core.widget.NestedScrollView>
