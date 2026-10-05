@@ -8,15 +8,11 @@ import android.os.Build;
 import android.provider.Settings;
 
 public class AlarmPermissionHelper {
-
-    /** True if exact alarms are allowed. Always true on Android < 12. */
     public static boolean canScheduleExact(Context c) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return true;
         AlarmManager am = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
         return am != null && am.canScheduleExactAlarms();
     }
-
-    /** Open the system screen so user can allow exact alarms. */
     public static void openExactAlarmSettings(Context c) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return;
         Intent i = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
