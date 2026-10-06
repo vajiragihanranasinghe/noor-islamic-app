@@ -37,6 +37,7 @@ public class TasbihFragment extends Fragment {
     private int selectedIndex = 0;
     private int count = 0;
     private boolean vibrateEnabled = true;
+    private boolean completionShown = false;
 
     private SharedPreferences prefs;
 
@@ -77,15 +78,35 @@ public class TasbihFragment extends Fragment {
         updateUI();
 
         btnTap.setOnClickListener(x -> {
+            DhikrPreset current = presets.get(selectedIndex);
+
             count++;
             vibrate();
-            prefs.edit().putInt(KEY_COUNT, count).apply();
+
+            prefs.edit()
+                    .putInt(KEY_COUNT, count)
+                    .apply();
+
+            if (count == current.target && !completionShown) {
+                completionShown = true;
+                btnTap.setText("✓ DONE");
+            } else if (count != current.target) {
+                completionShown = false;
+                btnTap.setText("TAP");
+            }
+
             updateUI();
         });
 
         btnReset.setOnClickListener(x -> {
             count = 0;
-            prefs.edit().putInt(KEY_COUNT, count).apply();
+            completionShown = false;
+
+            prefs.edit()
+                    .putInt(KEY_COUNT, count)
+                    .apply();
+
+            btnTap.setText("TAP");
             updateUI();
         });
 
