@@ -33,7 +33,8 @@ public class TasbihFragment extends Fragment {
     private TextView btnTap, btnReset, btnVibrate;
     private LinearLayout llPresets;
 
-    private List<DhikrPreset> presets = new ArrayList<>();
+    private final List<DhikrPreset> presets = new ArrayList<>();
+
     private int selectedIndex = 0;
     private int count = 0;
     private boolean vibrateEnabled = true;
@@ -43,13 +44,15 @@ public class TasbihFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_tasbih, container, false);
     }
 
     @Override
-    public void onViewCreated(@NonNull View v, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View v,
+                              @Nullable Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
 
         tvArabic = v.findViewById(R.id.tvDhikrArabic);
@@ -62,36 +65,85 @@ public class TasbihFragment extends Fragment {
         btnVibrate = v.findViewById(R.id.btnVibrate);
         llPresets = v.findViewById(R.id.llPresets);
 
-        prefs = requireContext().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        prefs = requireContext().getSharedPreferences(
+                PREFS,
+                Context.MODE_PRIVATE
+        );
+
+        // Build presets BEFORE restoring the saved index.
+        presets.clear();
+
+        presets.add(new DhikrPreset(
+                "سُبْحَانَ اللَّهِ",
+                "SubhanAllah",
+                "Glory be to Allah",
+                33
+        ));
+
+        presets.add(new DhikrPreset(
+                "الْحَمْدُ لِلَّهِ",
+                "Alhamdulillah",
+                "All praise is for Allah",
+                33
+        ));
+
+        presets.add(new DhikrPreset(
+                "اللَّهُ أَكْبَرُ",
+                "Allahu Akbar",
+                "Allah is the Greatest",
+                34
+        ));
+
+        presets.add(new DhikrPreset(
+                "لَا إِلَٰهَ إِلَّا اللَّهُ",
+                "La ilaha illallah",
+                "There is no god but Allah",
+                100
+        ));
+
+        presets.add(new DhikrPreset(
+                "أَسْتَغْفِرُ اللَّهَ",
+                "Astaghfirullah",
+                "I seek forgiveness from Allah",
+                100
+        ));
+
+        presets.add(new DhikrPreset(
+                "صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ",
+                "Salawat",
+                "Peace be upon him (PBUH)",
+                100
+        ));
+
         selectedIndex = prefs.getInt(KEY_INDEX, 0);
-        count = prefs.getInt(KEY_COUNT, 0);
-        vibrateEnabled = prefs.getBoolean(KEY_VIBRATE, true);
 
         if (selectedIndex < 0 || selectedIndex >= presets.size()) {
             selectedIndex = 0;
         }
 
-        DhikrPreset restoredPreset = presets.get(selectedIndex);
-        count = Math.max(0, count);
-        completionShown = count >= restoredPreset.target;
+        count = Math.max(0, prefs.getInt(KEY_COUNT, 0));
+        vibrateEnabled = prefs.getBoolean(KEY_VIBRATE, true);
 
-        presets.add(new DhikrPreset("سُبْحَانَ اللَّهِ", "SubhanAllah", "Glory be to Allah", 33));
-        presets.add(new DhikrPreset("الْحَمْدُ لِلَّهِ", "Alhamdulillah", "All praise is for Allah", 33));
-        presets.add(new DhikrPreset("اللَّهُ أَكْبَرُ", "Allahu Akbar", "Allah is the Greatest", 34));
-        presets.add(new DhikrPreset("لَا إِلَٰهَ إِلَّا اللَّهُ", "La ilaha illallah", "There is no god but Allah", 100));
-        presets.add(new DhikrPreset("أَسْتَغْفِرُ اللَّهَ", "Astaghfirullah", "I seek forgiveness from Allah", 100));
-        presets.add(new DhikrPreset("صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ", "Salawat", "Peace be upon him (PBUH)", 100));
+        DhikrPreset restoredPreset = presets.get(selectedIndex);
+
+        if (count > restoredPreset.target) {
+            count = restoredPreset.target;
+        }
+
+        completionShown = count >= restoredPreset.target;
 
         buildPresetButtons();
         updateUI();
+        updateVibrateButton();
+        updateTapButton();
 
         btnTap.setOnClickListener(x -> {
             DhikrPreset current = presets.get(selectedIndex);
 
             if (count >= current.target) {
+                // Start a new cycle.
                 count = 0;
                 completionShown = false;
-                btnTap.setText("TAP");
             } else {
                 count++;
                 vibrate();
@@ -99,10 +151,8 @@ public class TasbihFragment extends Fragment {
                 if (count >= current.target) {
                     count = current.target;
                     completionShown = true;
-                    btnTap.setText("✓ DONE");
                 } else {
                     completionShown = false;
-                    btnTap.setText("TAP");
                 }
             }
 
@@ -118,54 +168,74 @@ public class TasbihFragment extends Fragment {
             completionShown = false;
 
             prefs.edit()
-                    .putInt(KEY_COUNT, count)
+                    .putInt(KEY_COUNT, 0)
                     .apply();
 
-            btnTap.setText("TAP");
             updateUI();
         });
 
         btnVibrate.setOnClickListener(x -> {
             vibrateEnabled = !vibrateEnabled;
-            prefs.edit().putBoolean(KEY_VIBRATE, vibrateEnabled).apply();
+
+            prefs.edit()
+                    .putBoolean(KEY_VIBRATE, vibrateEnabled)
+                    .apply();
+
             updateVibrateButton();
         });
-
-        updateVibrateButton();
-        updateTapButton();
     }
 
     private void buildPresetButtons() {
+        if (llPresets == null) {
+            return;
+        }
+
         llPresets.removeAllViews();
+
         for (int i = 0; i < presets.size(); i++) {
             final int idx = i;
+
             TextView btn = new TextView(requireContext());
+
             btn.setText(presets.get(i).transliteration);
             btn.setTextSize(13f);
             btn.setPadding(32, 16, 32, 16);
 
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams lp =
+                    new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                    );
+
             lp.setMarginEnd(8);
             btn.setLayoutParams(lp);
 
-            btn.setBackgroundResource(i == selectedIndex
-                    ? R.drawable.bg_preset_selected
-                    : R.drawable.bg_preset_normal);
-            btn.setTextColor(getResources().getColor(
-                    i == selectedIndex ? R.color.white : R.color.primary));
+            btn.setBackgroundResource(
+                    i == selectedIndex
+                            ? R.drawable.bg_preset_selected
+                            : R.drawable.bg_preset_normal
+            );
+
+            btn.setTextColor(
+                    getResources().getColor(
+                            i == selectedIndex
+                                    ? R.color.white
+                                    : R.color.primary
+                    )
+            );
 
             btn.setOnClickListener(x -> {
                 selectedIndex = idx;
                 count = 0;
+                completionShown = false;
+
                 prefs.edit()
                         .putInt(KEY_INDEX, selectedIndex)
-                        .putInt(KEY_COUNT, count)
+                        .putInt(KEY_COUNT, 0)
                         .apply();
+
                 buildPresetButtons();
                 updateUI();
-                updateTapButton();
             });
 
             llPresets.addView(btn);
@@ -173,13 +243,20 @@ public class TasbihFragment extends Fragment {
     }
 
     private void updateUI() {
+        if (presets.isEmpty() || tvArabic == null) {
+            return;
+        }
+
         DhikrPreset p = presets.get(selectedIndex);
+
         tvArabic.setText(p.arabic);
         tvMeaning.setText(p.meaning);
         tvCount.setText(String.valueOf(count));
         tvTarget.setText(" / " + p.target);
+
         progressBar.setMax(p.target);
         progressBar.setProgress(Math.min(count, p.target));
+
         updateTapButton();
     }
 
@@ -198,16 +275,36 @@ public class TasbihFragment extends Fragment {
     }
 
     private void updateVibrateButton() {
-        btnVibrate.setText(vibrateEnabled ? "Vibrate: ON" : "Vibrate: OFF");
+        if (btnVibrate == null) {
+            return;
+        }
+
+        btnVibrate.setText(
+                vibrateEnabled
+                        ? "Vibrate: ON"
+                        : "Vibrate: OFF"
+        );
     }
 
     private void vibrate() {
-        if (!vibrateEnabled) return;
-        Vibrator vib = (Vibrator) requireContext().getSystemService(Context.VIBRATOR_SERVICE);
-        if (vib == null || !vib.hasVibrator()) return;
+        if (!vibrateEnabled) {
+            return;
+        }
+
+        Vibrator vib = (Vibrator)
+                requireContext().getSystemService(Context.VIBRATOR_SERVICE);
+
+        if (vib == null || !vib.hasVibrator()) {
+            return;
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vib.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
+            vib.vibrate(
+                    VibrationEffect.createOneShot(
+                            50,
+                            VibrationEffect.DEFAULT_AMPLITUDE
+                    )
+            );
         } else {
             vib.vibrate(50);
         }

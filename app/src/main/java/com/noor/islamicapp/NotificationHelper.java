@@ -31,9 +31,13 @@ public class NotificationHelper {
     private static final String MODE_CUSTOM = "custom";
     private static final String MODE_SILENT = "silent";
 
-    private static final String DEFAULT_CHANNEL_ID = "noor_adhan_default";
+    private static final String DEFAULT_CHANNEL_ID = "noor_adhan_azn_v3";
     private static final String SILENT_CHANNEL_ID = "noor_adhan_silent";
     private static final String CUSTOM_CHANNEL_PREFIX = "noor_adhan_custom_";
+
+    private static final String PRAYER_PREFS = "noor_prayer_schedule";
+    private static final String[] PRAYERS =
+            {"Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"};
 
     public static void createChannel(Context context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return;
@@ -51,41 +55,57 @@ public class NotificationHelper {
                 NotificationManager.IMPORTANCE_HIGH
         );
 
-        channel.setDescription("Adhan notifications for the 5 daily prayers");
+        channel.setDescription(
+                "Adhan notifications for the 5 daily prayers"
+        );
+
         channel.enableVibration(true);
         channel.setShowBadge(true);
 
         AudioAttributes audioAttributes =
                 new AudioAttributes.Builder()
                         .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .setContentType(
+                                AudioAttributes.CONTENT_TYPE_SONIFICATION
+                        )
                         .build();
 
         String mode = getSoundMode(context);
 
         if (MODE_SILENT.equals(mode)) {
+
             channel.setSound(null, audioAttributes);
+
         } else {
+
             Uri soundUri;
 
             if (MODE_CUSTOM.equals(mode)) {
+
                 String uriString = context
-                        .getSharedPreferences("noor_settings", Context.MODE_PRIVATE)
+                        .getSharedPreferences(
+                                "noor_settings",
+                                Context.MODE_PRIVATE
+                        )
                         .getString(PREF_SOUND_URI, "");
 
                 soundUri = !uriString.isEmpty()
                         ? Uri.parse(uriString)
                         : getDefaultSound();
+
             } else {
+
                 soundUri = Uri.parse(
                         "android.resource://" +
                                 context.getPackageName() +
-                                "/" +
-                                R.raw.azan_holy_makkah
+                                "/raw/azan_holy_makkah"
                 );
             }
 
-            channel.setSound(soundUri, audioAttributes);
+            channel.setSound(
+                    soundUri,
+                    audioAttributes
+            );
         }
 
         nm.createNotificationChannel(channel);
@@ -97,13 +117,40 @@ public class NotificationHelper {
         );
     }
 
+    public static void recreateChannel(Context context) {
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return;
+
+        NotificationManager nm =
+                context.getSystemService(NotificationManager.class);
+
+        if (nm == null) return;
+
+        String channelId = getChannelId(context);
+
+        try {
+            nm.deleteNotificationChannel(channelId);
+        } catch (Exception ignored) {
+        }
+
+        createChannel(context);
+    }
+
     public static String getSoundMode(Context context) {
+
         return context
-                .getSharedPreferences("noor_settings", Context.MODE_PRIVATE)
-                .getString(PREF_SOUND_MODE, MODE_DEFAULT);
+                .getSharedPreferences(
+                        "noor_settings",
+                        Context.MODE_PRIVATE
+                )
+                .getString(
+                        PREF_SOUND_MODE,
+                        MODE_DEFAULT
+                );
     }
 
     public static String getChannelId(Context context) {
+
         String mode = getSoundMode(context);
 
         if (MODE_SILENT.equals(mode)) {
@@ -111,8 +158,12 @@ public class NotificationHelper {
         }
 
         if (MODE_CUSTOM.equals(mode)) {
+
             String uri = context
-                    .getSharedPreferences("noor_settings", Context.MODE_PRIVATE)
+                    .getSharedPreferences(
+                            "noor_settings",
+                            Context.MODE_PRIVATE
+                    )
                     .getString(PREF_SOUND_URI, "");
 
             return CUSTOM_CHANNEL_PREFIX +
@@ -129,15 +180,17 @@ public class NotificationHelper {
 
         createChannel(context);
 
-        Intent intent = new Intent(context, MainActivity.class);
+        Intent intent =
+                new Intent(context, MainActivity.class);
 
-        PendingIntent pi = PendingIntent.getActivity(
-                context,
-                prayer.hashCode(),
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT |
-                        PendingIntent.FLAG_IMMUTABLE
-        );
+        PendingIntent pi =
+                PendingIntent.getActivity(
+                        context,
+                        prayer.hashCode(),
+                        intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT |
+                                PendingIntent.FLAG_IMMUTABLE
+                );
 
         NotificationCompat.Builder b =
                 new NotificationCompat.Builder(
@@ -145,7 +198,9 @@ public class NotificationHelper {
                         getChannelId(context)
                 )
                         .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle("Prayer Time: " + prayer)
+                        .setContentTitle(
+                                "Prayer Time: " + prayer
+                        )
                         .setContentText(
                                 "It's time for " +
                                         prayer +
@@ -153,38 +208,61 @@ public class NotificationHelper {
                                         time +
                                         ")"
                         )
-                        .setPriority(NotificationCompat.PRIORITY_HIGH)
-                        .setCategory(NotificationCompat.CATEGORY_ALARM)
+                        .setPriority(
+                                NotificationCompat.PRIORITY_HIGH
+                        )
+                        .setCategory(
+                                NotificationCompat.CATEGORY_ALARM
+                        )
                         .setAutoCancel(true)
                         .setOnlyAlertOnce(true)
-                        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                        .setWhen(System.currentTimeMillis())
+                        .setVisibility(
+                                NotificationCompat.VISIBILITY_PUBLIC
+                        )
+                        .setWhen(
+                                System.currentTimeMillis()
+                        )
                         .setContentIntent(pi);
 
         try {
+
             NotificationManagerCompat
                     .from(context)
-                    .notify(prayer.hashCode(), b.build());
+                    .notify(
+                            prayer.hashCode(),
+                            b.build()
+                    );
 
-            Log.d(TAG, "Notification shown: " + prayer);
+            Log.d(
+                    TAG,
+                    "Notification shown: " + prayer
+            );
 
         } catch (SecurityException e) {
-            Log.e(TAG,
+
+            Log.e(
+                    TAG,
                     "Notification permission denied: " +
-                            e.getMessage());
+                            e.getMessage()
+            );
         }
     }
 
-    public static void scheduleTestNotification(Context context) {
+    public static void scheduleTestNotification(
+            Context context) {
 
         AlarmManager am =
                 (AlarmManager) context.getSystemService(
-                        Context.ALARM_SERVICE);
+                        Context.ALARM_SERVICE
+                );
 
         if (am == null) return;
 
         Intent intent =
-                new Intent(context, PrayerReceiver.class);
+                new Intent(
+                        context,
+                        PrayerReceiver.class
+                );
 
         intent.putExtra("prayer", "Test");
         intent.putExtra("time", "Now");
@@ -202,15 +280,19 @@ public class NotificationHelper {
                 System.currentTimeMillis() + 5000;
 
         try {
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
 
                 if (am.canScheduleExactAlarms()) {
+
                     am.setExactAndAllowWhileIdle(
                             AlarmManager.RTC_WAKEUP,
                             when,
                             pi
                     );
+
                 } else {
+
                     am.set(
                             AlarmManager.RTC_WAKEUP,
                             when,
@@ -219,6 +301,7 @@ public class NotificationHelper {
                 }
 
             } else {
+
                 am.setExactAndAllowWhileIdle(
                         AlarmManager.RTC_WAKEUP,
                         when,
@@ -226,13 +309,18 @@ public class NotificationHelper {
                 );
             }
 
-            Log.d(TAG,
-                    "Test notification scheduled for +5s");
+            Log.d(
+                    TAG,
+                    "Test notification scheduled for +5s"
+            );
 
         } catch (SecurityException e) {
-            Log.e(TAG,
+
+            Log.e(
+                    TAG,
                     "Cannot schedule exact alarm: " +
-                            e.getMessage());
+                            e.getMessage()
+            );
         }
     }
 
@@ -244,30 +332,82 @@ public class NotificationHelper {
 
         AlarmManager am =
                 (AlarmManager) context.getSystemService(
-                        Context.ALARM_SERVICE);
+                        Context.ALARM_SERVICE
+                );
 
         if (am == null) return;
 
+        if (prayer == null || prayer.isEmpty()) return;
+
+        /*
+         * Save the daily prayer time.
+         * This allows BootReceiver to restore alarms
+         * after a device reboot.
+         */
+        context.getSharedPreferences(
+                PRAYER_PREFS,
+                Context.MODE_PRIVATE
+        )
+                .edit()
+                .putInt(
+                        prayer + "_hour",
+                        hour
+                )
+                .putInt(
+                        prayer + "_minute",
+                        minute
+                )
+                .apply();
+
         Calendar cal = Calendar.getInstance();
 
-        cal.set(Calendar.HOUR_OF_DAY, hour);
-        cal.set(Calendar.MINUTE, minute);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
+        cal.set(
+                Calendar.HOUR_OF_DAY,
+                hour
+        );
+
+        cal.set(
+                Calendar.MINUTE,
+                minute
+        );
+
+        cal.set(
+                Calendar.SECOND,
+                0
+        );
+
+        cal.set(
+                Calendar.MILLISECOND,
+                0
+        );
 
         if (cal.getTimeInMillis()
                 <= System.currentTimeMillis() + 1000) {
 
-            cal.add(Calendar.DAY_OF_YEAR, 1);
+            cal.add(
+                    Calendar.DAY_OF_YEAR,
+                    1
+            );
         }
 
         Intent intent =
-                new Intent(context, PrayerReceiver.class);
+                new Intent(
+                        context,
+                        PrayerReceiver.class
+                );
 
-        intent.putExtra("prayer", prayer);
+        intent.putExtra(
+                "prayer",
+                prayer
+        );
+
         intent.putExtra(
                 "time",
-                String.format("%02d:%02d", hour, minute)
+                String.format(
+                        "%02d:%02d",
+                        hour,
+                        minute
+                )
         );
 
         PendingIntent pi =
@@ -309,13 +449,117 @@ public class NotificationHelper {
                 );
             }
 
+            Log.d(
+                    TAG,
+                    "Prayer scheduled: " +
+                            prayer +
+                            " " +
+                            hour +
+                            ":" +
+                            minute
+            );
+
         } catch (SecurityException e) {
 
-            Log.e(TAG,
+            Log.e(
+                    TAG,
                     "Cannot schedule alarm for " +
                             prayer +
                             ": " +
-                            e.getMessage());
+                            e.getMessage()
+            );
+        }
+    }
+
+    /*
+     * Restore all five saved daily prayer alarms.
+     * Called after reboot and system time/timezone changes.
+     */
+    public static void restoreSavedPrayerAlarms(
+            Context context) {
+
+        if (!PrayerPrefs.notifOn(context)) {
+            return;
+        }
+
+        android.content.SharedPreferences prefs =
+                context.getSharedPreferences(
+                        PRAYER_PREFS,
+                        Context.MODE_PRIVATE
+                );
+
+        for (String prayer : PRAYERS) {
+
+            String hourKey =
+                    prayer + "_hour";
+
+            String minuteKey =
+                    prayer + "_minute";
+
+            if (!prefs.contains(hourKey)
+                    || !prefs.contains(minuteKey)) {
+                continue;
+            }
+
+            int hour =
+                    prefs.getInt(hourKey, -1);
+
+            int minute =
+                    prefs.getInt(minuteKey, -1);
+
+            if (hour < 0
+                    || hour > 23
+                    || minute < 0
+                    || minute > 59) {
+                continue;
+            }
+
+            schedulePrayer(
+                    context,
+                    prayer,
+                    hour,
+                    minute
+            );
+        }
+
+        Log.d(
+                TAG,
+                "Saved prayer alarms restored"
+        );
+    }
+
+    public static void cancelAllPrayerAlarms(
+            Context context) {
+
+        AlarmManager am =
+                (AlarmManager) context.getSystemService(
+                        Context.ALARM_SERVICE
+                );
+
+        if (am == null) return;
+
+        for (String prayer : PRAYERS) {
+
+            Intent intent =
+                    new Intent(
+                            context,
+                            PrayerReceiver.class
+                    );
+
+            PendingIntent pi =
+                    PendingIntent.getBroadcast(
+                            context,
+                            prayer.hashCode(),
+                            intent,
+                            PendingIntent.FLAG_UPDATE_CURRENT |
+                                    PendingIntent.FLAG_IMMUTABLE
+                    );
+
+            try {
+                am.cancel(pi);
+                pi.cancel();
+            } catch (Exception ignored) {
+            }
         }
     }
 
@@ -327,38 +571,93 @@ public class NotificationHelper {
                 Context context,
                 Intent intent) {
 
+            if (intent == null) return;
+
             String prayer =
                     intent.getStringExtra("prayer");
 
             String time =
                     intent.getStringExtra("time");
 
-            if (prayer != null) {
+            if (prayer == null
+                    || prayer.isEmpty()) {
+                return;
+            }
 
-                showPrayerNotification(
-                        context,
-                        prayer,
-                        time != null ? time : ""
-                );
+            /*
+             * Always show the notification.
+             */
+            showPrayerNotification(
+                    context,
+                    prayer,
+                    time != null ? time : ""
+            );
 
-                if (!"Test".equals(prayer)
-                        && time != null
-                        && time.contains(":")) {
+            /*
+             * Start the working foreground Azan service.
+             */
+            try {
 
-                    try {
-
-                        String[] parts =
-                                time.split(":");
-
-                        schedulePrayer(
+                Intent azanIntent =
+                        new Intent(
                                 context,
-                                prayer,
-                                Integer.parseInt(parts[0]),
-                                Integer.parseInt(parts[1])
+                                AzanPlaybackService.class
                         );
 
-                    } catch (Exception ignored) {
-                    }
+                azanIntent.putExtra(
+                        "prayer",
+                        prayer
+                );
+
+                if (Build.VERSION.SDK_INT
+                        >= Build.VERSION_CODES.O) {
+
+                    context.startForegroundService(
+                            azanIntent
+                    );
+
+                } else {
+
+                    context.startService(
+                            azanIntent
+                    );
+                }
+
+            } catch (Exception e) {
+
+                Log.e(
+                        TAG,
+                        "Could not start Azan service",
+                        e
+                );
+            }
+
+            /*
+             * Schedule the next occurrence.
+             */
+            if (!"Test".equals(prayer)
+                    && time != null
+                    && time.contains(":")) {
+
+                try {
+
+                    String[] parts =
+                            time.split(":");
+
+                    schedulePrayer(
+                            context,
+                            prayer,
+                            Integer.parseInt(parts[0]),
+                            Integer.parseInt(parts[1])
+                    );
+
+                } catch (Exception e) {
+
+                    Log.e(
+                            TAG,
+                            "Could not schedule next prayer",
+                            e
+                    );
                 }
             }
         }

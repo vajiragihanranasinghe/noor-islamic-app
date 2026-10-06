@@ -337,7 +337,7 @@ public class SettingsFragment extends Fragment {
 
             tvTest.setOnClickListener(x -> {
 
-                NotificationHelper.createChannel(
+                NotificationHelper.recreateChannel(
                         requireContext()
                 );
 
@@ -408,7 +408,7 @@ public class SettingsFragment extends Fragment {
                                         )
                                         .apply();
 
-                                NotificationHelper.createChannel(
+                                NotificationHelper.recreateChannel(
                                         requireContext()
                                 );
 
@@ -436,7 +436,7 @@ public class SettingsFragment extends Fragment {
                                         )
                                         .apply();
 
-                                NotificationHelper.createChannel(
+                                NotificationHelper.recreateChannel(
                                         requireContext()
                                 );
 
@@ -520,7 +520,7 @@ public class SettingsFragment extends Fragment {
                 )
                 .apply();
 
-        NotificationHelper.createChannel(
+        NotificationHelper.recreateChannel(
                 requireContext()
         );
 
