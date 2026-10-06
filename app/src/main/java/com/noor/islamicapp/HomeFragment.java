@@ -46,6 +46,10 @@ public class HomeFragment extends Fragment {
     private android.widget.ProgressBar prayerProgressBar;
     private TextView tvStatus, tvMethod;
     private ImageView btnRefresh;
+
+    private View cardJummah;
+    private TextView tvJummahTitle, tvJummahSubtitle;
+    private TextView tvJummahKahf, tvJummahSalawat;
     private RecyclerView rvPrayers;
 
     private LocationHelper locationHelper;
@@ -83,6 +87,11 @@ public class HomeFragment extends Fragment {
         tvMethod              = v.findViewById(R.id.tvMethod);
         btnRefresh            = v.findViewById(R.id.btnRefresh);
         rvPrayers             = v.findViewById(R.id.rvPrayers);
+        cardJummah        = v.findViewById(R.id.cardJummah);
+        tvJummahTitle     = v.findViewById(R.id.tvJummahTitle);
+        tvJummahSubtitle  = v.findViewById(R.id.tvJummahSubtitle);
+        tvJummahKahf      = v.findViewById(R.id.tvJummahKahf);
+        tvJummahSalawat   = v.findViewById(R.id.tvJummahSalawat);
         tvProgressFajr        = v.findViewById(R.id.tvProgressFajr);
         tvProgressDhuhr       = v.findViewById(R.id.tvProgressDhuhr);
         tvProgressAsr         = v.findViewById(R.id.tvProgressAsr);
@@ -109,6 +118,36 @@ public class HomeFragment extends Fragment {
             adapter.notifyDataSetChanged();
             updatePrayerProgress();
         });
+        tvJummahKahf.setOnClickListener(x -> {
+            boolean completed = JummahPrefs.isCompleted(
+                    requireContext(),
+                    "kahf"
+            );
+
+            JummahPrefs.setCompleted(
+                    requireContext(),
+                    "kahf",
+                    !completed
+            );
+
+            updateJummahActions();
+        });
+
+        tvJummahSalawat.setOnClickListener(x -> {
+            boolean completed = JummahPrefs.isCompleted(
+                    requireContext(),
+                    "salawat"
+            );
+
+            JummahPrefs.setCompleted(
+                    requireContext(),
+                    "salawat",
+                    !completed
+            );
+
+            updateJummahActions();
+        });
+
         rvPrayers.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvPrayers.setAdapter(adapter);
 
@@ -136,6 +175,8 @@ public class HomeFragment extends Fragment {
 
     @Override public void onResume() {
         super.onResume();
+        updateJummahCard();
+        updateJummahActions();
         if (tickRunnable != null) ticker.post(tickRunnable);
         loadLocationAndPrayers();
     }
@@ -453,6 +494,62 @@ public class HomeFragment extends Fragment {
                         completed
                 )
         );
+    }
+
+    private void updateJummahActions() {
+        if (tvJummahKahf == null || tvJummahSalawat == null) return;
+
+        boolean kahfDone = JummahPrefs.isCompleted(
+                requireContext(),
+                "kahf"
+        );
+
+        boolean salawatDone = JummahPrefs.isCompleted(
+                requireContext(),
+                "salawat"
+        );
+
+        tvJummahKahf.setText(
+                kahfDone
+                        ? "✓ Surah Al-Kahf completed"
+                        : "📖 Recommended: Read Surah Al-Kahf"
+        );
+
+        tvJummahSalawat.setText(
+                salawatDone
+                        ? "✓ Salawat completed"
+                        : "🤲 Increase Salawat upon the Prophet ﷺ"
+        );
+
+        int activeColor = ContextCompat.getColor(
+                requireContext(),
+                R.color.primary
+        );
+
+        int normalColor = ContextCompat.getColor(
+                requireContext(),
+                R.color.accent_dark
+        );
+
+        tvJummahKahf.setTextColor(
+                kahfDone ? activeColor : normalColor
+        );
+
+        tvJummahSalawat.setTextColor(
+                salawatDone ? activeColor : normalColor
+        );
+    }
+
+    private void updateJummahCard() {
+        if (cardJummah == null) return;
+
+        Calendar calendar = Calendar.getInstance();
+
+        if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) {
+            cardJummah.setVisibility(View.VISIBLE);
+        } else {
+            cardJummah.setVisibility(View.GONE);
+        }
     }
 
     private void updateCountdown() {
