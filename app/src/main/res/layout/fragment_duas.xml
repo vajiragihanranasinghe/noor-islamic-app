@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -27,6 +29,7 @@
             android:text="Authentic supplications from Quran &amp; Sunnah"
             android:textColor="@color/accent"
             android:textSize="13sp" />
+
     </LinearLayout>
 
     <HorizontalScrollView
@@ -41,6 +44,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingHorizontal="12dp" />
+
     </HorizontalScrollView>
 
     <EditText
@@ -70,7 +74,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvDuas"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:clipToPadding="false"
         android:paddingBottom="16dp" />
+
 </LinearLayout>

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -16,21 +17,45 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Category badge -->
-        <TextView
-            android:id="@+id/tvCategory"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_surah_number"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="4dp"
-            android:text="Morning"
-            android:textColor="@color/primary"
-            android:textSize="11sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.05" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-        <!-- Title -->
+            <TextView
+                android:id="@+id/tvCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_surah_number"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:text="Morning"
+                android:textColor="@color/primary"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tvDuaFavorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:text="☆"
+                android:textColor="@color/primary"
+                android:textSize="27sp"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="Add to favorites" />
+
+        </LinearLayout>
+
         <TextView
             android:id="@+id/tvDuaTitle"
             android:layout_width="match_parent"
@@ -41,7 +66,6 @@
             android:textSize="15sp"
             android:textStyle="bold" />
 
-        <!-- Arabic -->
         <TextView
             android:id="@+id/tvDuaArabic"
             android:layout_width="match_parent"
@@ -53,7 +77,6 @@
             android:textSize="22sp"
             android:lineSpacingExtra="8dp" />
 
-        <!-- Transliteration -->
         <TextView
             android:id="@+id/tvDuaTranslit"
             android:layout_width="match_parent"
@@ -65,14 +88,12 @@
             android:textStyle="italic"
             android:lineSpacingExtra="2dp" />
 
-        <!-- Divider -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="12dp"
             android:background="@color/divider" />
 
-        <!-- English meaning -->
         <TextView
             android:id="@+id/tvDuaMeaning"
             android:layout_width="match_parent"
@@ -83,7 +104,6 @@
             android:textSize="14sp"
             android:lineSpacingExtra="3dp" />
 
-        <!-- Reference -->
         <TextView
             android:id="@+id/tvDuaRef"
             android:layout_width="match_parent"
@@ -95,4 +115,5 @@
             android:textStyle="bold" />
 
     </LinearLayout>
+
 </androidx.cardview.widget.CardView>

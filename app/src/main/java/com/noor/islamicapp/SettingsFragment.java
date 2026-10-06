@@ -356,7 +356,7 @@ public class SettingsFragment extends Fragment {
 
         if (tvVersion != null) {
             tvVersion.setText(
-                    "Noor Islamic Companion v1.4.0"
+                    "Noor Islamic Companion v1.5.0"
             );
         }
 

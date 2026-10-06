@@ -23,60 +23,273 @@ public class NamesFragment extends Fragment {
     private RecyclerView rvNames;
     private EditText etSearch;
     private TextView tvStatus;
+    private TextView tvFavoritesFilter;
+
     private NamesAdapter adapter;
-    private List<NameOfAllah> all = new ArrayList<>();
+    private List<NameOfAllah> all =
+            new ArrayList<>();
+
+    private boolean favoritesOnly = false;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_names, container, false);
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState
+    ) {
+        return inflater.inflate(
+                R.layout.fragment_names,
+                container,
+                false
+        );
     }
 
     @Override
-    public void onViewCreated(@NonNull View v, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(
+            @NonNull View v,
+            @Nullable Bundle savedInstanceState
+    ) {
         super.onViewCreated(v, savedInstanceState);
 
-        rvNames = v.findViewById(R.id.rvNames);
-        etSearch = v.findViewById(R.id.etSearch);
-        tvStatus = v.findViewById(R.id.tvNamesStatus);
+        rvNames =
+                v.findViewById(R.id.rvNames);
 
-        adapter = new NamesAdapter();
-        rvNames.setLayoutManager(new LinearLayoutManager(requireContext()));
+        etSearch =
+                v.findViewById(R.id.etSearch);
+
+        tvStatus =
+                v.findViewById(R.id.tvNamesStatus);
+
+        tvFavoritesFilter =
+                v.findViewById(
+                        R.id.tvFavoritesFilter
+                );
+
+        adapter =
+                new NamesAdapter(
+                        this::applyFilters
+                );
+
+        rvNames.setLayoutManager(
+                new LinearLayoutManager(
+                        requireContext()
+                )
+        );
+
         rvNames.setAdapter(adapter);
 
+        tvFavoritesFilter.setOnClickListener(v1 -> {
+
+            favoritesOnly =
+                    !favoritesOnly;
+
+            updateFavoritesButton();
+
+            applyFilters();
+        });
+
         new Thread(() -> {
-            final List<NameOfAllah> loaded = NamesRepository.getNames(requireContext());
-            if (getActivity() == null) return;
+
+            final List<NameOfAllah> loaded =
+                    NamesRepository.getNames(
+                            requireContext()
+                    );
+
+            if (getActivity() == null) {
+                return;
+            }
+
             getActivity().runOnUiThread(() -> {
-                all = loaded;
-                adapter.setItems(loaded);
-                tvStatus.setVisibility(loaded.isEmpty() ? View.VISIBLE : View.GONE);
-                if (loaded.isEmpty()) tvStatus.setText("Failed to load names");
+
+                all = loaded != null
+                        ? loaded
+                        : new ArrayList<>();
+
+                adapter.setItems(all);
+
+                updateFavoritesButton();
+
+                updateStatus();
+
             });
+
         }).start();
 
-        etSearch.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
-            @Override public void onTextChanged(CharSequence s, int a, int b, int c) { filter(s.toString()); }
-            @Override public void afterTextChanged(Editable s) {}
-        });
+        etSearch.addTextChangedListener(
+                new TextWatcher() {
+
+                    @Override
+                    public void beforeTextChanged(
+                            CharSequence s,
+                            int start,
+                            int count,
+                            int after
+                    ) {
+                    }
+
+                    @Override
+                    public void onTextChanged(
+                            CharSequence s,
+                            int start,
+                            int before,
+                            int count
+                    ) {
+                        applyFilters();
+                    }
+
+                    @Override
+                    public void afterTextChanged(
+                            Editable s
+                    ) {
+                    }
+                }
+        );
     }
 
-    private void filter(String q) {
-        if (q == null || q.trim().isEmpty()) {
-            adapter.setItems(all);
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (adapter != null) {
+            applyFilters();
+        }
+    }
+
+    private void updateFavoritesButton() {
+
+        int count =
+                FavoritesPrefs.getNameFavoriteCount(
+                        requireContext()
+                );
+
+        if (favoritesOnly) {
+
+            tvFavoritesFilter.setText(
+                    "★ Favorites (" + count + ")"
+            );
+
+            tvFavoritesFilter.setBackgroundResource(
+                    R.drawable.bg_preset_selected
+            );
+
+            tvFavoritesFilter.setTextColor(
+                    getResources().getColor(
+                            R.color.white
+                    )
+            );
+
+        } else {
+
+            tvFavoritesFilter.setText(
+                    "☆ Favorites (" + count + ")"
+            );
+
+            tvFavoritesFilter.setBackgroundResource(
+                    R.drawable.bg_preset_normal
+            );
+
+            tvFavoritesFilter.setTextColor(
+                    getResources().getColor(
+                            R.color.primary
+                    )
+            );
+        }
+    }
+
+    private void applyFilters() {
+
+        if (etSearch == null
+                || adapter == null) {
             return;
         }
-        String query = q.toLowerCase().trim();
-        List<NameOfAllah> filtered = new ArrayList<>();
+
+        String q =
+                etSearch
+                        .getText()
+                        .toString()
+                        .toLowerCase()
+                        .trim();
+
+        List<NameOfAllah> filtered =
+                new ArrayList<>();
+
         for (NameOfAllah n : all) {
-            if (n.transliteration.toLowerCase().contains(query)
-                    || n.meaning.toLowerCase().contains(query)
-                    || n.arabic.contains(q)) {
+
+            boolean favorite =
+                    FavoritesPrefs.isNameFavorite(
+                            requireContext(),
+                            n
+                    );
+
+            if (favoritesOnly
+                    && !favorite) {
+                continue;
+            }
+
+            boolean matchesSearch =
+                    q.isEmpty()
+                            || safe(n.transliteration)
+                            .toLowerCase()
+                            .contains(q)
+                            || safe(n.meaning)
+                            .toLowerCase()
+                            .contains(q)
+                            || safe(n.arabic)
+                            .contains(q)
+                            || String.valueOf(
+                            n.number
+                    ).equals(q);
+
+            if (matchesSearch) {
                 filtered.add(n);
             }
         }
+
         adapter.setItems(filtered);
+
+        updateStatus(filtered.size());
+    }
+
+    private String safe(String value) {
+        return value == null
+                ? ""
+                : value;
+    }
+
+    private void updateStatus() {
+        updateStatus(all.size());
+    }
+
+    private void updateStatus(int visibleCount) {
+
+        if (all.isEmpty()) {
+
+            tvStatus.setText(
+                    "Failed to load names"
+            );
+
+            tvStatus.setVisibility(
+                    View.VISIBLE
+            );
+
+        } else if (visibleCount == 0) {
+
+            tvStatus.setText(
+                    favoritesOnly
+                            ? "No favorite names yet"
+                            : "No matching names found"
+            );
+
+            tvStatus.setVisibility(
+                    View.VISIBLE
+            );
+
+        } else {
+
+            tvStatus.setVisibility(
+                    View.GONE
+            );
+        }
     }
 }

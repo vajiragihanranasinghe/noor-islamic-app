@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -27,6 +29,7 @@
             android:text="Asma' ul-Husna · The Beautiful Names"
             android:textColor="@color/accent"
             android:textSize="13sp" />
+
     </LinearLayout>
 
     <EditText
@@ -35,13 +38,29 @@
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
         android:background="@drawable/bg_search"
-        android:hint="Search by name or meaning…"
+        android:hint="Search by name, meaning or number…"
         android:padding="12dp"
         android:textColor="@color/text_primary"
         android:textColorHint="@color/text_secondary"
         android:textSize="14sp"
         android:inputType="text"
         android:maxLines="1" />
+
+    <TextView
+        android:id="@+id/tvFavoritesFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/bg_preset_normal"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
+        android:text="☆ Favorites (0)"
+        android:textColor="@color/primary"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:clickable="true"
+        android:focusable="true" />
 
     <TextView
         android:id="@+id/tvNamesStatus"
@@ -56,7 +75,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvNames"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:clipToPadding="false"
         android:paddingBottom="16dp" />
+
 </LinearLayout>

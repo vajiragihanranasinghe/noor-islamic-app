@@ -161,6 +161,31 @@ public final class QuranProgressPrefs {
         return result;
     }
 
+    public static int bookmarkCountForSurah(
+            Context context,
+            int surahId
+    ) {
+        return getBookmarkedAyahs(
+                context,
+                surahId
+        ).size();
+    }
+
+    public static int getFirstBookmarkAyahForSurah(
+            Context context,
+            int surahId
+    ) {
+        List<Integer> ayahs =
+                getBookmarkedAyahs(
+                        context,
+                        surahId
+                );
+
+        return ayahs.isEmpty()
+                ? 0
+                : ayahs.get(0);
+    }
+
     public static int[] getFirstBookmark(
             Context context
     ) {

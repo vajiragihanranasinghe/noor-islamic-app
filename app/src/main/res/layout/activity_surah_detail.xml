@@ -71,6 +71,19 @@
         android:textSize="24sp"
         android:background="@color/surface" />
 
+    <TextView
+        android:id="@+id/tvBookmarkJump"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        android:padding="10dp"
+        android:text="★ Jump to first bookmark"
+        android:textColor="@color/primary"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvAyahs"
         android:layout_width="match_parent"

@@ -41,6 +41,7 @@ public class MoreFragment extends Fragment {
         features.add(new FeatureAdapter.Feature("🧭", "Qibla",     "Direction to Kaaba", "qibla"));
         features.add(new FeatureAdapter.Feature("📊", "Salah History", "Prayer progress", "salah_history"));
         features.add(new FeatureAdapter.Feature("📿", "Tasbih", "Digital dhikr counter", "tasbih"));
+        features.add(new FeatureAdapter.Feature("🔎", "Search", "Search Noor content", "search"));
         features.add(new FeatureAdapter.Feature("📤", "Share",     "Share this app",     "share"));
         features.add(new FeatureAdapter.Feature("⭐", "Rate Us",   "Support the app",    "rate"));
 
@@ -58,6 +59,7 @@ public class MoreFragment extends Fragment {
         else if ("qibla".equals(key))    replaceSelf(new QiblaFragment());
         else if ("salah_history".equals(key)) replaceSelf(new SalahHistoryFragment());
         else if ("tasbih".equals(key))   replaceSelf(new TasbihFragment());
+        else if ("search".equals(key))   replaceSelf(new GlobalSearchFragment());
         else if ("share".equals(key))    shareApp();
         else if ("rate".equals(key))     rateApp();
     }

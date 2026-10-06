@@ -67,6 +67,14 @@ public class TasbihFragment extends Fragment {
         count = prefs.getInt(KEY_COUNT, 0);
         vibrateEnabled = prefs.getBoolean(KEY_VIBRATE, true);
 
+        if (selectedIndex < 0 || selectedIndex >= presets.size()) {
+            selectedIndex = 0;
+        }
+
+        DhikrPreset restoredPreset = presets.get(selectedIndex);
+        count = Math.max(0, count);
+        completionShown = count >= restoredPreset.target;
+
         presets.add(new DhikrPreset("سُبْحَانَ اللَّهِ", "SubhanAllah", "Glory be to Allah", 33));
         presets.add(new DhikrPreset("الْحَمْدُ لِلَّهِ", "Alhamdulillah", "All praise is for Allah", 33));
         presets.add(new DhikrPreset("اللَّهُ أَكْبَرُ", "Allahu Akbar", "Allah is the Greatest", 34));
@@ -80,20 +88,27 @@ public class TasbihFragment extends Fragment {
         btnTap.setOnClickListener(x -> {
             DhikrPreset current = presets.get(selectedIndex);
 
-            count++;
-            vibrate();
+            if (count >= current.target) {
+                count = 0;
+                completionShown = false;
+                btnTap.setText("TAP");
+            } else {
+                count++;
+                vibrate();
+
+                if (count >= current.target) {
+                    count = current.target;
+                    completionShown = true;
+                    btnTap.setText("✓ DONE");
+                } else {
+                    completionShown = false;
+                    btnTap.setText("TAP");
+                }
+            }
 
             prefs.edit()
                     .putInt(KEY_COUNT, count)
                     .apply();
-
-            if (count == current.target && !completionShown) {
-                completionShown = true;
-                btnTap.setText("✓ DONE");
-            } else if (count != current.target) {
-                completionShown = false;
-                btnTap.setText("TAP");
-            }
 
             updateUI();
         });
@@ -117,6 +132,7 @@ public class TasbihFragment extends Fragment {
         });
 
         updateVibrateButton();
+        updateTapButton();
     }
 
     private void buildPresetButtons() {
@@ -149,6 +165,7 @@ public class TasbihFragment extends Fragment {
                         .apply();
                 buildPresetButtons();
                 updateUI();
+                updateTapButton();
             });
 
             llPresets.addView(btn);
@@ -163,6 +180,21 @@ public class TasbihFragment extends Fragment {
         tvTarget.setText(" / " + p.target);
         progressBar.setMax(p.target);
         progressBar.setProgress(Math.min(count, p.target));
+        updateTapButton();
+    }
+
+    private void updateTapButton() {
+        if (btnTap == null || presets.isEmpty()) {
+            return;
+        }
+
+        DhikrPreset p = presets.get(selectedIndex);
+
+        btnTap.setText(
+                count >= p.target
+                        ? "✓ DONE"
+                        : "TAP"
+        );
     }
 
     private void updateVibrateButton() {

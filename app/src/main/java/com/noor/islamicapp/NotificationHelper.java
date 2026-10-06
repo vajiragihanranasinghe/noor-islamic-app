@@ -156,6 +156,9 @@ public class NotificationHelper {
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
                         .setCategory(NotificationCompat.CATEGORY_ALARM)
                         .setAutoCancel(true)
+                        .setOnlyAlertOnce(true)
+                        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                        .setWhen(System.currentTimeMillis())
                         .setContentIntent(pi);
 
         try {
